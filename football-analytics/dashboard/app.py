@@ -21,6 +21,27 @@ section[data-testid="stSidebar"] {border-right: 1px solid rgba(255,255,255,0.06)
 hr {margin: 0.6rem 0;}
 </style>
 """
+
+
+st.markdown("""
+<style>
+
+/* Toggle OFF */
+div[data-baseweb="switch"] > div {
+    background-color: #4b5563 !important;
+}
+
+/* Toggle ON */
+div[data-baseweb="switch"] input:checked + div {
+    background-color: #2dd4bf !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+
+
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
