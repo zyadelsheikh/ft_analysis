@@ -136,7 +136,7 @@ def player_latest_context(df: pd.DataFrame, player: str):
     rows = df[df["player"] == player]
     if rows.empty:
         return None
-    latest = rows.loc[rows["season_id"]]
+    latest = rows.loc[rows["season_id"].idxmax()]
     return {"league": latest["league"], "season": latest["season"], "team": latest["team"]}
 
 
