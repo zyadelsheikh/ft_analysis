@@ -18,7 +18,6 @@ def render(df):
         df["season"] == season
     ].copy()
 
-    # Filter low-minute players
     if "Minutes" in season_df.columns:
         season_df = season_df[
             season_df["Minutes"] >= 900
@@ -48,27 +47,6 @@ def render(df):
         "Choose Player",
         sorted(season_df["player"].unique())
     )
-
-    # Position Filter
-    if "position" in season_df.columns:
-
-        player_position = (
-            season_df.loc[
-                season_df["player"] == player,
-                "position"
-            ]
-            .iloc[0]
-        )
-
-        same_position = st.toggle(
-            "Compare only same position",
-            value=True
-        )
-
-        if same_position:
-            season_df = season_df[
-                season_df["position"] == player_position
-            ].reset_index(drop=True)
 
     scaler = StandardScaler()
 
@@ -117,14 +95,72 @@ def render(df):
         top_n
     )
 
-    st.subheader(
-        f"Players Similar to {player}"
-    )
+    st.markdown("---")
 
-    st.dataframe(
-        result,
-        use_container_width=True
-    )
+    st.subheader(f"Players Similar to {player}")
+
+    # Top 3 Cards
+    if len(result) >= 3:
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(
+                "🥇 Most Similar",
+                result.iloc[0]["player"],
+                f"{result.iloc[0]['Similarity']}%"
+            )
+
+        with col2:
+            st.metric(
+                "🥈 Second Closest",
+                result.iloc[1]["player"],
+                f"{result.iloc[1]['Similarity']}%"
+            )
+
+        with col3:
+            st.metric(
+                "🥉 Third Closest",
+                result.iloc[2]["player"],
+                f"{result.iloc[2]['Similarity']}%"
+            )
+
+    st.markdown("### Similarity Ranking")
+
+    for _, row in result.iterrows():
+
+        st.markdown(
+            f"""
+            <div style="
+                padding:15px;
+                border-radius:12px;
+                margin-bottom:8px;
+                background:#111827;
+                border:1px solid #1f2937;
+            ">
+                <h4 style="margin:0;">
+                    ⚽ {row['player']}
+                </h4>
+                <p style="margin:4px 0;">
+                    🏟️ {row['team']}
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.progress(
+            min(
+                int(row["Similarity"]),
+                100
+            )
+        )
+
+        st.caption(
+            f"Similarity Score: {row['Similarity']}%"
+        )
+
+    st.markdown("---")
 
     fig = px.bar(
         result,
@@ -139,7 +175,8 @@ def render(df):
             autorange="reversed"
         ),
         xaxis_title="Similarity %",
-        yaxis_title=""
+        yaxis_title="",
+        height=450
     )
 
     st.plotly_chart(
