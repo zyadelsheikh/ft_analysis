@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 def render(df):
 
-    st.title("# Similarity Comparison")
+    st.title("🔍 Similarity Comparison")
 
     season = st.selectbox(
         "Choose Season",
@@ -17,6 +17,12 @@ def render(df):
     season_df = df[
         df["season"] == season
     ].copy()
+
+    # Filter low-minute players
+    if "Minutes" in season_df.columns:
+        season_df = season_df[
+            season_df["Minutes"] >= 900
+        ]
 
     FEATURES = [
         "Goals",
@@ -38,6 +44,32 @@ def render(df):
         st.warning("No data available for this season.")
         return
 
+    player = st.selectbox(
+        "Choose Player",
+        sorted(season_df["player"].unique())
+    )
+
+    # Position Filter
+    if "position" in season_df.columns:
+
+        player_position = (
+            season_df.loc[
+                season_df["player"] == player,
+                "position"
+            ]
+            .iloc[0]
+        )
+
+        same_position = st.toggle(
+            "Compare only same position",
+            value=True
+        )
+
+        if same_position:
+            season_df = season_df[
+                season_df["position"] == player_position
+            ].reset_index(drop=True)
+
     scaler = StandardScaler()
 
     X = scaler.fit_transform(
@@ -51,9 +83,11 @@ def render(df):
         for idx, player in enumerate(season_df["player"])
     }
 
-    player = st.selectbox(
-        "Choose Player",
-        sorted(season_df["player"].unique())
+    top_n = st.slider(
+        "Number of Similar Players",
+        min_value=3,
+        max_value=15,
+        value=5
     )
 
     def get_similar_players(player_name, top_n=5):
@@ -78,9 +112,14 @@ def render(df):
 
         return result
 
-    result = get_similar_players(player)
+    result = get_similar_players(
+        player,
+        top_n
+    )
 
-    st.subheader(f"Players Similar to {player}")
+    st.subheader(
+        f"Players Similar to {player}"
+    )
 
     st.dataframe(
         result,
@@ -96,7 +135,9 @@ def render(df):
     )
 
     fig.update_layout(
-        yaxis=dict(autorange="reversed"),
+        yaxis=dict(
+            autorange="reversed"
+        ),
         xaxis_title="Similarity %",
         yaxis_title=""
     )
