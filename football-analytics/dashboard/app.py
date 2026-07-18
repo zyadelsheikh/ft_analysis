@@ -47,8 +47,8 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 def _go_to_player(player_name: str, latest: dict):
     st.session_state["nav_page"] = "Player Season"
-    st.session_state["ps_league"] = ["league"]
-    st.session_state["ps_season"] = ["season"]
+    st.session_state["ps_league"] = latest["league"]
+    st.session_state["ps_season"] = latest["season"]
     st.session_state["ps_team"] = "All Teams"
     st.session_state["ps_min_minutes"] = 0
     st.session_state["ps_player"] = player_name
@@ -58,8 +58,8 @@ def _go_to_player(player_name: str, latest: dict):
 
 def _go_to_team(team_name: str, latest: dict):
     st.session_state["nav_page"] = "Team Season"
-    st.session_state["ts_league"] = ["league"]
-    st.session_state["ts_season"] = ["season"]
+    st.session_state["ts_league"] = latest["league"]
+    st.session_state["ts_season"] = latest["season"]
     st.session_state["ts_team"] = team_name
     st.session_state["global_search"] = ""
 
