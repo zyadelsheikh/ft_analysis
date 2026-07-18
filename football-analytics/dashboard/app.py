@@ -1,8 +1,13 @@
 import streamlit as st
 
 from data import load_denormalized, search_entities, player_latest_context, team_latest_context
-from pages_lib import home, player_season, team_season, league_ranking
-
+from pages_lib import (
+    home,
+    player_season,
+    team_season,
+    league_ranking,
+    similar_players
+)
 st.set_page_config(page_title="Football Analytics", page_icon="⚽", layout="wide")
 
 CUSTOM_CSS = """
@@ -89,7 +94,7 @@ with st.sidebar:
 
     page = st.radio(
         "Navigate",
-        ["Home", "Player Season", "Team Season", "League Ranking"],
+        ["Home", "Player Season", "Team Season", "League Ranking","Similar Players"],
         key="nav_page",
         label_visibility="collapsed",
     )
@@ -103,3 +108,6 @@ elif page == "Team Season":
     team_season.render(df)
 elif page == "League Ranking":
     league_ranking.render(df)
+elif page == "Similar Players":
+    similar_players.render(df)     
+    
