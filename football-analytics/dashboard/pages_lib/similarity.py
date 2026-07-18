@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 def render(df):
 
-    st.subheader("Similarity Comparison")
+    st.subheader("🤖 AI Similarity Engine")
 
     season = st.selectbox(
         "Season",
