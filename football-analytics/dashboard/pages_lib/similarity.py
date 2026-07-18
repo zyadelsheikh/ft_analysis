@@ -14,22 +14,24 @@ def render(df):
         sorted(df["season"].unique())
     )
 
+    league = st.selectbox(
+        "Choose League",
+        ["All Leagues"] + sorted(df["league"].dropna().unique())
+    )
+
     season_df = df[
         df["season"] == season
     ].copy()
+
+    if league != "All Leagues":
+        season_df = season_df[
+            season_df["league"] == league
+        ]
 
     if "Minutes" in season_df.columns:
         season_df = season_df[
             season_df["Minutes"] >= 900
         ]
-    season_df = df[
-    df["season"] == season
-    ].copy()
-
-    if league != "All Leagues":
-      season_df = season_df[
-        season_df["league"] == league
-       ]    
 
     FEATURES = [
         "Goals",
@@ -50,11 +52,7 @@ def render(df):
     if season_df.empty:
         st.warning("No data available for this season.")
         return
-        
-    league = st.selectbox(
-    "Choose League",
-    ["All Leagues"] + sorted(df["league"].dropna().unique())
-    )
+
     player = st.selectbox(
         "Choose Player",
         sorted(season_df["player"].unique())
@@ -109,9 +107,10 @@ def render(df):
 
     st.markdown("---")
 
-    st.subheader(f"Players Similar to {player}")
+    st.subheader(
+        f"Players Similar to {player}"
+    )
 
-    # Top 3 Cards
     if len(result) >= 3:
 
         col1, col2, col3 = st.columns(3)
