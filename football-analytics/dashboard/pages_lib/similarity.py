@@ -136,15 +136,7 @@ def render(df):
                 f"{result.iloc[2]['Similarity']}%"
             )
 
-    st.markdown("### 📋 Full Similarity Ranking")
-
-    with st.expander("View Full Ranking"):
-
-        st.dataframe(
-            result,
-            use_container_width=True,
-            hide_index=True
-        )
+    
 
     st.markdown("---")
 
