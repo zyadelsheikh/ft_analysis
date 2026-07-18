@@ -6,7 +6,7 @@ from pages_lib import (
     player_season,
     team_season,
     league_ranking,
-    similar_players
+    similarity
 )
 st.set_page_config(page_title="Football Analytics", page_icon="⚽", layout="wide")
 
