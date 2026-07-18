@@ -136,39 +136,14 @@ def render(df):
                 f"{result.iloc[2]['Similarity']}%"
             )
 
-    st.markdown("### Similarity Ranking")
+    st.markdown("### 📋 Full Similarity Ranking")
 
-    for _, row in result.iterrows():
+    with st.expander("View Full Ranking"):
 
-        st.markdown(
-            f"""
-            <div style="
-                padding:15px;
-                border-radius:12px;
-                margin-bottom:8px;
-                background:#111827;
-                border:1px solid #1f2937;
-            ">
-                <h4 style="margin:0;">
-                    ⚽ {row['player']}
-                </h4>
-                <p style="margin:4px 0;">
-                    🏟️ {row['team']}
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.progress(
-            min(
-                int(row["Similarity"]),
-                100
-            )
-        )
-
-        st.caption(
-            f"Similarity Score: {row['Similarity']}%"
+        st.dataframe(
+            result,
+            use_container_width=True,
+            hide_index=True
         )
 
     st.markdown("---")
