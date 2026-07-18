@@ -10,12 +10,12 @@ def render(df):
     st.title(" Similarity Comparison")
 
     season = st.selectbox(
-        "Choose Season",
+        "Season",
         sorted(df["season"].unique())
     )
 
     league = st.selectbox(
-        "Choose League",
+        "League",
         ["All Leagues"] + sorted(df["league"].dropna().unique())
     )
 
@@ -54,7 +54,7 @@ def render(df):
         return
 
     player = st.selectbox(
-        "Choose Player",
+        "Player",
         sorted(season_df["player"].unique())
     )
 
