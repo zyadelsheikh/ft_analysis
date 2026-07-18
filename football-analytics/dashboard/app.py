@@ -109,5 +109,5 @@ elif page == "Team Season":
 elif page == "League Ranking":
     league_ranking.render(df)
 elif page == "Similar Players":
-    similar_players.render(df)     
+    similarity.render(df)     
     
