@@ -81,7 +81,7 @@ def render(full_df: pd.DataFrame):
     left, right = st.columns([1.1, 1])
 
     with left:
-        st.markdown("#### Attribute Radar (percentile rank)")
+        st.markdown("Player Scouting Report")
         metrics = [m for m in RADAR_DEFAULT_METRICS if metric_has_data(pool, m)]
         if len(metrics) >= 3:
             fig = _build_radar(pool, player, metrics, compare_pool, compare_player)
