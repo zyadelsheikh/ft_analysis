@@ -119,12 +119,38 @@ def render(full_df: pd.DataFrame):
     trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
     trend_df = player_trend(full_df, player, trend_metrics)
     if len(trend_df) >= 2:
-        fig = px.line(
-            trend_df, x="season", y=trend_metrics, markers=True,
-            labels={"value": "Total", "season": "Season", "variable": "Metric"},
-        )
-        fig.update_layout(height=380, margin=dict(l=10, r=10, t=20, b=10), legend_title="")
-        st.plotly_chart(fig, width="stretch")
+    fig = px.line(
+        trend_df,
+        x="season",
+        y=trend_metrics,
+        markers=True,
+        color_discrete_map={
+            "Goals": "#5B8FF9",
+            "Assists": "#61DDAA",
+            "Expected_Goals": "#F6BD16",
+            "Expected_Assists": "#9270CA",
+        },
+        labels={
+            "value": "Total",
+            "season": "Season",
+            "variable": "Metric",
+        },
+    )
+
+    fig.update_traces(
+        line=dict(width=3),
+        marker=dict(size=8)
+    )
+
+    fig.update_layout(
+        height=380,
+        margin=dict(l=10, r=10, t=20, b=10),
+        legend_title="",
+        hovermode="x unified",
+        template="plotly_dark"
+    )
+
+    st.plotly_chart(fig, width="stretch")
     else:
         st.info(f"{player} only has one season on record — nothing to trend yet.")
 
