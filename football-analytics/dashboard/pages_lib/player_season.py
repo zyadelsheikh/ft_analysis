@@ -129,7 +129,7 @@ def render(full_df: pd.DataFrame):
         st.info(f"{player} only has one season on record — nothing to trend yet.")
 
     st.divider()
-    st.markdown("#### 📋 Season-by-Season Log")
+    st.markdown("#### Season-by-Season Performance")
     log_cols = [
         "season", "league", "team", "Pos", "Age", "Matches_Played", "Minutes_Played",
         "Goals", "Assists",
