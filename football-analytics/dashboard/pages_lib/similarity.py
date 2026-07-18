@@ -22,6 +22,14 @@ def render(df):
         season_df = season_df[
             season_df["Minutes"] >= 900
         ]
+    season_df = df[
+    df["season"] == season
+    ].copy()
+
+    if league != "All Leagues":
+      season_df = season_df[
+        season_df["league"] == league
+       ]    
 
     FEATURES = [
         "Goals",
@@ -42,7 +50,11 @@ def render(df):
     if season_df.empty:
         st.warning("No data available for this season.")
         return
-
+        
+    league = st.selectbox(
+    "Choose League",
+    ["All Leagues"] + sorted(df["league"].dropna().unique())
+    )
     player = st.selectbox(
         "Choose Player",
         sorted(season_df["player"].unique())
