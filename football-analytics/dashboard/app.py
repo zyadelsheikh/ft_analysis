@@ -55,6 +55,22 @@ div[data-baseweb="switch"] input:checked + div {
 </style>
 """, unsafe_allow_html=True)
 
+
+st.markdown("""
+<style>
+
+div[role="radiogroup"] label {
+    font-size: 1.12rem !important;
+    font-weight: 600 !important;
+}
+
+div[role="radiogroup"] > label {
+    margin-bottom: 10px !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
