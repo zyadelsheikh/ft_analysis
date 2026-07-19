@@ -59,20 +59,23 @@ div[data-baseweb="switch"] input:checked + div {
 st.markdown("""
 <style>
 
-div[role="radiogroup"] label {
+div[role="radiogroup"] > label {
+    margin-bottom: 2px !important;
+    padding: 6px 8px !important;
+    border-radius: 8px;
+}
+
+div[role="radiogroup"] label p {
     font-size: 1.12rem !important;
     font-weight: 600 !important;
 }
 
-div[role="radiogroup"] > label {
-    margin-bottom: 10px !important;
+div[role="radiogroup"] > label:hover {
+    background: rgba(45,212,191,.08);
 }
 
 </style>
 """, unsafe_allow_html=True)
-
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
 
 def _go_to_player(player_name: str, latest: dict):
     st.session_state["nav_page"] = "👤 Player Scout"
