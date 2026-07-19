@@ -93,7 +93,7 @@ if "nav_page" not in st.session_state:
 
 with st.sidebar:
 
-    st.markdown("#⚽Football Data Analytics")
+    st.markdown("# ⚽Football Data Analytics")
 
     query = st.text_input(
         "Search Players & Clubs",
