@@ -239,7 +239,7 @@ def _render_header(player, league, season, row):
 
     c1.metric("Minutes", f"{int(row['Minutes_Played']):,}")
 
-    c2.metric("Apps", int(row["Matches_Played"]))
+    c2.metric("Matches Played", int(row["Matches_Played"]))
 
     avg_min = (
         row["Minutes_Played"] / row["Matches_Played"]
