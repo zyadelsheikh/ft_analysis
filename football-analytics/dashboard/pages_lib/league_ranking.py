@@ -15,20 +15,20 @@ def render(df: pd.DataFrame):
 
     c1, c2, c3, c4 = st.columns([1.2, 1.2, 1, 1])
     with c1:
-        group = st.selectbox("Metric Group", list(METRIC_GROUPS.keys()), key="lr_group")
+        group = st.selectbox("Performance Area", list(METRIC_GROUPS.keys()), key="lr_group")
     with c2:
         metric_options = [m for m in METRIC_GROUPS[group] if metric_has_data(pool, m)]
         if not metric_options:
             st.warning(f"No data available for the '{group}' metrics in {season} ({league}).")
             return
-        metric = st.selectbox("Metric", metric_options, key="lr_metric")
+        metric = st.selectbox("Performance Metric", metric_options, key="lr_metric")
     with c3:
         show_n = st.slider("Show N Players", 5, 50, 20, key="lr_n")
     with c4:
-        ascending = st.toggle("Ascending", value=False, key="lr_asc")
+        ascending = st.toggle("Ranking Order", value=False, key="lr_asc")
 
     positions = sorted(pool["Pos"].dropna().unique())
-    selected_pos = st.multiselect("Position Filter (applied after ranking)", positions, key="lr_pos")
+    selected_pos = st.multiselect("Position Filter", positions, key="lr_pos")
 
     pool = pool.copy()
     pool["metric_p90"] = per90(pool, metric)
