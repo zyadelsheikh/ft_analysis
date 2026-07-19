@@ -262,32 +262,17 @@ def _render_header(player, league, season, row):
     )
 
 
-def _render_compare_table(
-    pool: pd.DataFrame,
-    player: str,
-    compare_pool: pd.DataFrame,
-    compare_player: str
-):
-
-    st.markdown("### ⚔️ Head-to-Head Comparison")
-
+def _render_compare_table(pool: pd.DataFrame, player: str, compare_pool: pd.DataFrame, compare_player: str):
+    st.markdown("#### Head-to-Head")
     row_a = pool[pool["player"] == player].iloc[0]
     row_b = compare_pool[compare_pool["player"] == compare_player].iloc[0]
-
     data = {
-        "Metric": [label for _, label in STAT_CARDS],
+        "Stat": [label for _, label in STAT_CARDS],
         player: [row_a.get(col, np.nan) for col, _ in STAT_CARDS],
         compare_player: [row_b.get(col, np.nan) for col, _ in STAT_CARDS],
     }
-
     table = pd.DataFrame(data)
-
-    st.data_editor(
-    table,
-    use_container_width=True,
-    hide_index=True,
-    disabled=True
-    )
+    st.dataframe(table, width="stretch", hide_index=True)
 
 
 def _build_radar(pool: pd.DataFrame, player: str, metrics: list, compare_pool: pd.DataFrame = None, compare_player: str = None):
