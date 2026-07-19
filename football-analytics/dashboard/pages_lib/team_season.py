@@ -35,7 +35,7 @@ def render(full_df: pd.DataFrame):
         st.warning("No team data available for this competition / season.")
         return
 
-    st.markdown(f"### {team}")
+    st.markdown(f"## {team}")
     st.caption(f"{league} · {season}")
 
     c1, c2, c3, c4, c5 = st.columns(5)
