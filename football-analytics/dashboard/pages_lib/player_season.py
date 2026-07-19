@@ -17,7 +17,7 @@ STAT_CARDS = [
     ("Expected_Goals", "xG"), ("Expected_Assists", "xA"),
     ("Shots", "Shots"), ("Shots_On_Target", "SoT"),
     ("Key_Passes", "Key Passes"), ("Tackles", "Tackles"),
-    ("Interceptions", "Interceptions"), ("xg_diff", "G - xG"),
+    ("Interceptions", "Interceptions"), ("Finishing Overperformance", "G - xG"),
 ]
 
 EXTRA_STAT_CARDS = [
