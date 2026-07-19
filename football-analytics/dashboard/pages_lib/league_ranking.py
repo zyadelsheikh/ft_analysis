@@ -11,7 +11,7 @@ def render(df: pd.DataFrame):
         pool, league, season, _ = season_league_filters(df, "lr")
         pool = min_minutes_filter(pool, "lr")
 
-    st.markdown("## 🏆 League Ranking")
+    st.markdown("### 🏆 League Ranking")
 
     c1, c2, c3, c4 = st.columns([1.2, 1.2, 1, 1])
     with c1:
