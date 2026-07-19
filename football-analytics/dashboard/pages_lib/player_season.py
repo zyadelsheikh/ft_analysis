@@ -157,8 +157,8 @@ def render(full_df: pd.DataFrame):
     
         fig.update_traces(
             mode="lines+markers",
-            line=dict(width=4),
-            marker=dict(size=10)
+            line=dict(width=2),
+            marker=dict(size=7)
         )
     
       
