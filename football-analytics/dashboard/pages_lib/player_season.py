@@ -119,7 +119,7 @@ def render(full_df: pd.DataFrame):
             _render_stat_cards("Key Player Stats", row, STAT_CARDS, columns=2)
             _render_stat_cards("Advanced Stats", row, EXTRA_STAT_CARDS, columns=2, extras=_with_extra_stats(row))
 
-    st.markdown(f'<div class="ps-section">{player} — Performance Trend Across Seasons</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="ps-section">{player} â€” Performance Trend Across Seasons</div>', unsafe_allow_html=True)
     trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
     trend_df = player_trend(full_df, player, trend_metrics)
     if len(trend_df) >= 2:
@@ -135,7 +135,7 @@ def render(full_df: pd.DataFrame):
                 trace.marker.color = colors[trace.name]
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
     else:
-        st.info(f"{player} only has one season on record — nothing to trend yet.")
+        st.info(f"{player} only has one season on record â€” nothing to trend yet.")
 
     st.markdown('<div class="ps-section">Season-by-Season Performance</div>', unsafe_allow_html=True)
     log_cols = ["season", "league", "team", "Pos", "Age", "Matches_Played", "Minutes_Played", "Goals", "Assists"]
@@ -147,23 +147,23 @@ def render(full_df: pd.DataFrame):
 
 
 def _render_header(player, league, season, row):
-    team = row.get("team", "—")
-    pos = row.get("Pos", "—")
-    nation = row.get("Nation", "—")
-    born = row.get("Born", "—")
-    born_display = int(born) if pd.notna(born) else "—"
+    team = row.get("team", "â€”")
+    pos = row.get("Pos", "â€”")
+    nation = row.get("Nation", "â€”")
+    born = row.get("Born", "â€”")
+    born_display = int(born) if pd.notna(born) else "â€”"
     minutes = row.get("Minutes_Played", 0)
     matches = row.get("Matches_Played", 0)
     avg_min = minutes / matches if matches else 0
     nineties = row.get("Full_Match_Equivalents")
-    nineties_display = f"{nineties:.1f}" if pd.notna(nineties) else "—"
+    nineties_display = f"{nineties:.1f}" if pd.notna(nineties) else "â€”"
     goals = int(row.get("Goals", 0)) if pd.notna(row.get("Goals")) else 0
-    st.markdown(f'''<div class="ps-hero"><div class="ps-kicker">PLAYER PROFILE · {season}</div><div class="ps-name">{player}</div><div class="ps-subtitle">{team} · {league} · {season}</div><div class="ps-meta">{nation} · Born {born_display} · Position: {pos}</div><div style="height:18px"></div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px"><div class="ps-kpi"><div class="ps-kpi-label">Minutes</div><div class="ps-kpi-value">{int(minutes):,}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Matches</div><div class="ps-kpi-value">{int(matches)}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Avg Min</div><div class="ps-kpi-value">{avg_min:.0f}</div></div><div class="ps-kpi"><div class="ps-kpi-label">90s</div><div class="ps-kpi-value">{nineties_display}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Goals</div><div class="ps-kpi-value">{goals}</div></div></div></div>''', unsafe_allow_html=True)
+    st.markdown(f'''<div class="ps-hero"><div class="ps-kicker">PLAYER PROFILE Â· {season}</div><div class="ps-name">{player}</div><div class="ps-subtitle">{team} Â· {league} Â· {season}</div><div class="ps-meta">{nation} Â· Born {born_display} Â· Position: {pos}</div><div style="height:18px"></div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px"><div class="ps-kpi"><div class="ps-kpi-label">Minutes</div><div class="ps-kpi-value">{int(minutes):,}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Matches</div><div class="ps-kpi-value">{int(matches)}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Avg Min</div><div class="ps-kpi-value">{avg_min:.0f}</div></div><div class="ps-kpi"><div class="ps-kpi-label">90s</div><div class="ps-kpi-value">{nineties_display}</div></div><div class="ps-kpi"><div class="ps-kpi-label">Goals</div><div class="ps-kpi-value">{goals}</div></div></div></div>''', unsafe_allow_html=True)
 
 
 def _format_value(value, decimals=2):
     if pd.isna(value):
-        return "—"
+        return "â€”"
     return f"{value:.{decimals}f}" if isinstance(value, (float, np.floating)) else f"{value:,}" if isinstance(value, (int, np.integer)) else str(value)
 
 
@@ -220,3 +220,9 @@ def _build_radar(pool, player, metrics, compare_pool=None, compare_player=None):
         fig.add_trace(go.Scatterpolar(r=cmp_values + [cmp_values[0]], theta=labels + [labels[0]], fill="toself", name=compare_player, line=dict(color="#fb923c", width=2), fillcolor="rgba(251,146,60,.16)"))
     fig.update_layout(polar=dict(bgcolor="rgba(0,0,0,0)", radialaxis=dict(visible=True, range=[0, 100], gridcolor="#35504c", linecolor="#35504c", tickfont=dict(color="#9db6b1")), angularaxis=dict(gridcolor="#35504c", linecolor="#35504c", tickfont=dict(color="#c7d9d5"))), paper_bgcolor="rgba(0,0,0,0)", showlegend=bool(compare_player), legend=dict(orientation="h", y=-.12, x=.5, xanchor="center"), margin=dict(l=42, r=42, t=18, b=36), height=430, hoverlabel=dict(bgcolor="#142626"))
     return fig
+
+
+
+
+
+
