@@ -99,7 +99,7 @@ def render(full_df: pd.DataFrame):
         if compare_player and compare_pool is not None:
             _render_compare_table(pool, player, compare_pool, compare_player)
         else:
-            st.markdown("##### Player Performance")
+            st.markdown("### Key Performance Metrics")
             cols = st.columns(2)
             for i, (col, label) in enumerate(STAT_CARDS):
                 val = row.get(col, np.nan)
@@ -116,17 +116,64 @@ def render(full_df: pd.DataFrame):
 
     st.divider()
     st.markdown(f"#### 📈 {player} — Performance Trend Across Seasons")
-    trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
-    trend_df = player_trend(full_df, player, trend_metrics)
+    
+    trend_metrics = [
+        m for m in TREND_METRICS
+        if metric_has_data(full_df, m)
+    ]
+    
+    trend_df = player_trend(
+        full_df,
+        player,
+        trend_metrics
+    )
+    
     if len(trend_df) >= 2:
+    
         fig = px.line(
-            trend_df, x="season", y=trend_metrics, markers=True,
-            labels={"value": "Total", "season": "Season", "variable": "Metric"},
+            trend_df,
+            x="season",
+            y=trend_metrics,
+            markers=True,
+            labels={
+                "value": "Total",
+                "season": "Season",
+                "variable": "Metric",
+            },
         )
-        fig.update_layout(height=380, margin=dict(l=10, r=10, t=20, b=10), legend_title="")
-        st.plotly_chart(fig, width="stretch")
+    
+        colors = {
+            "Goals": "#00E5FF",             # سماوي
+            "Assists": "#FFC300",           # أصفر
+            "Expected_Goals": "#FF3B30",    # أحمر
+            "Expected_Assists": "#34C759"   # أخضر
+        }
+    
+        for trace in fig.data:
+            if trace.name in colors:
+                trace.line.color = colors[trace.name]
+                trace.marker.color = colors[trace.name]
+    
+        fig.update_layout(
+            height=380,
+            margin=dict(
+                l=10,
+                r=10,
+                t=20,
+                b=10
+            ),
+            legend_title=""
+        )
+    
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+    
     else:
-        st.info(f"{player} only has one season on record — nothing to trend yet.")
+        st.info(
+            f"{player} only has one season on record — nothing to trend yet."
+        )
 
     st.divider()
     st.markdown("#### Season-by-Season Performance")
