@@ -4,14 +4,16 @@ import streamlit as st
 
 from data import METRIC_GROUPS, per90, metric_has_data
 from pages_lib.filters import season_league_filters, min_minutes_filter, export_buttons
+from pages_lib.ui import inject_styles, hero, section
 
 
 def render(df: pd.DataFrame):
+    inject_styles()
     with st.sidebar:
         pool, league, season, _ = season_league_filters(df, "lr")
         pool = min_minutes_filter(pool, "lr")
 
-    st.markdown("### 🏆 League Ranking")
+    hero("League Analytics", "League Ranking", f"{league} · {season}")
 
     c1, c2, c3, c4 = st.columns([1.2, 1.2, 1, 1])
     with c1:
@@ -43,12 +45,13 @@ def render(df: pd.DataFrame):
         st.info("No players match these filters.")
         return
 
+    section(f"{metric.replace('_', ' ')} — Player Ranking")
     fig = px.bar(
         ranked.sort_values("metric_p90"),
         x="metric_p90", y="player", orientation="h",
         text="metric_p90",
         labels={"metric_p90": f"{metric.replace('_', ' ')} p90", "player": ""},
-        title=f"League Ranking — {metric.replace('_', ' ')} p90 ({season}, {league})",
+        title=f"{metric.replace('_', ' ')} p90",
     )
     fig.update_traces(texttemplate="%{text:.2f}", textposition="outside", marker_color="#2dd4bf")
     fig.update_layout(height=max(400, 20 * len(ranked)), margin=dict(l=10, r=10, t=60, b=10))
