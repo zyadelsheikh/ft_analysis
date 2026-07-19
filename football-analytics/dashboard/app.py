@@ -128,6 +128,7 @@ with st.sidebar:
         "Navigate",
         [
             " Analytics Hub",
+            
             " Player Scout",
             " Team Analysis",
             " League Leaderboards",
