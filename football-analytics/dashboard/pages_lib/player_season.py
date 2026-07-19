@@ -99,14 +99,14 @@ def render(full_df: pd.DataFrame):
         if compare_player and compare_pool is not None:
             _render_compare_table(pool, player, compare_pool, compare_player)
         else:
-            st.markdown("#### Player Performance")
+            st.markdown("##### Player Performance")
             cols = st.columns(2)
             for i, (col, label) in enumerate(STAT_CARDS):
                 val = row.get(col, np.nan)
                 display = f"{val:.2f}" 
                 cols[i % 2].metric(label, display)
 
-            st.markdown("#### Advanced Statistics")
+            st.markdown("##### Advanced Statistics")
             extra = _with_extra_stats(row)
             cols2 = st.columns(2)
             for i, (key, label) in enumerate(EXTRA_STAT_CARDS):
