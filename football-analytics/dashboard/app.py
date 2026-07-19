@@ -17,7 +17,7 @@ from pages_lib import (
 )
 
 st.set_page_config(
-    page_title="TopFive Analytics",
+    page_title="Football Analytics",
     page_icon="⚽",
     layout="wide"
 )
