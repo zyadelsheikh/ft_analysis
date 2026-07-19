@@ -86,7 +86,7 @@ if df.empty:
     st.stop()
 
 if "nav_page" not in st.session_state:
-    st.session_state["nav_page"] = "⚽ Analytics Hub"
+    st.session_state["nav_page"] = " Analytics Hub"
 
 with st.sidebar:
 
@@ -127,11 +127,11 @@ with st.sidebar:
     page = st.radio(
         "Navigate",
         [
-            "⚽ Analytics Hub",
-            "👤 Player Scout",
-            "🛡 Team Analysis",
-            "🏆 League Leaderboards",
-            "🎯 Player Similarity Finder"
+            " Analytics Hub",
+            " Player Scout",
+            " Team Analysis",
+            " League Leaderboards",
+            " Player Similarity Finder"
         ],
         key="nav_page",
         label_visibility="collapsed",
@@ -139,17 +139,17 @@ with st.sidebar:
 
     st.caption("Top-5 European Leagues • 2017–2026")
 
-if page == "⚽ Analytics Hub":
+if page == " Analytics Hub":
     home.render(df)
 
-elif page == "👤 Player Scout":
+elif page == " Player Scout":
     player_season.render(df)
 
-elif page == "🛡 Team Analysis":
+elif page == " Team Analysis":
     team_season.render(df)
 
-elif page == "🏆 League Leaderboards":
+elif page == " League Leaderboards":
     league_ranking.render(df)
 
-elif page == "🎯 Player Similarity Finder":
+elif page == " Player Similarity Finder":
     similarity.render(df)
