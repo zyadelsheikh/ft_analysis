@@ -61,34 +61,6 @@ div[role="radiogroup"] label {
 </style>
 """, unsafe_allow_html=True)
 
-[data-testid="stSidebar"] {
-    background: #121417;
-}
-
-
-.stButton > button {
-    width: 100%;
-    height: 45px;
-    background: #1B1F24;
-    color: #E5E7EB;
-    border: 1px solid #2A2F35;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-
-.stButton > button:hover {
-    background: #242A31;
-    border-color: #22C55E;
-    color: white;
-}
-
-
-/* Active button */
-.stButton > button:focus {
-    border: 1px solid #22C55E;
-    box-shadow: none;
-}
 
 
 def _go_to_player(player_name: str, latest: dict):
