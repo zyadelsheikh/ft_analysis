@@ -124,7 +124,6 @@ with st.sidebar:
 
         st.divider()
 
-    st.markdown("### Navigation")
 
     if st.button("Analytics Hub", use_container_width=True):
         st.session_state["nav_page"] = "Analytics Hub"
