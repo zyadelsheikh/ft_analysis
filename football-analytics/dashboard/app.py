@@ -25,66 +25,68 @@ st.set_page_config(
 CUSTOM_CSS = """
 <style>
 
-/* ---------- APP ---------- */
-
-.stApp{
-    background:#0f1318;
+.block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
 }
 
-/* ---------- SIDEBAR ---------- */
-
-[data-testid="stSidebar"]{
-    background:#111418;
-    border-right:1px solid #232a33;
+[data-testid="stMetric"] {
+    background-color: rgba(45, 212, 191, 0.06);
+    border: 1px solid rgba(45, 212, 191, 0.18);
+    border-radius: 10px;
+    padding: 10px 14px;
 }
 
-/* ---------- SEARCH ---------- */
-
-.stTextInput input{
-    background:#181c21 !important;
-    color:white !important;
-
-    border:1px solid #2b313a !important;
-    border-radius:12px !important;
+[data-testid="stMetricLabel"] {
+    opacity: 0.75;
+    font-size: 0.8rem;
 }
 
-/* ---------- METRICS ---------- */
-
-[data-testid="stMetric"]{
-    background:#181c21;
-    border:1px solid #252b33;
-    border-radius:12px;
-    padding:12px;
+[data-testid="stMetricValue"] {
+    font-size: 1.35rem;
 }
 
-/* ---------- LAYOUT ---------- */
-
-.block-container{
-    padding-top:1rem;
-    padding-bottom:2rem;
+[data-testid="stSidebar"] {
+    background: #111418;
+    border-right: 1px solid #232a33;
 }
 
-/* ---------- TOGGLES ---------- */
-
-div[data-baseweb="switch"] > div{
-    background-color:#4b5563 !important;
+.stTextInput input {
+    background: #181c21 !important;
+    color: white !important;
+    border: 1px solid #2b313a !important;
+    border-radius: 12px !important;
 }
 
-div[data-baseweb="switch"] input:checked + div{
-    background-color:#20c997 !important;
+.search-hit-btn button {
+    width: 100%;
+    text-align: left;
 }
 
-/* ---------- RADIO ---------- */
-
-div[role="radiogroup"] label{
-    font-size:18px !important;
-    font-weight:600 !important;
+hr {
+    margin: 0.6rem 0;
 }
 
 </style>
 """
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+
+/* Toggle OFF */
+div[data-baseweb="switch"] > div {
+    background-color: #4b5563 !important;
+}
+
+/* Toggle ON */
+div[data-baseweb="switch"] input:checked + div {
+    background-color: #2dd4bf !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 def _go_to_player(player_name: str, latest: dict):
@@ -160,49 +162,22 @@ with st.sidebar:
 
         st.divider()
 
-    pages = [
-        "Analytics Hub",
-        "Player Scout",
-        "Team Analysis",
-        "League Rankings",
-        "Similar Players"
-    ]
-
-    icons = [
-        "house",
-        "person",
-        "shield",
-        "trophy",
-        "bullseye"
-    ]
-
-    current_page = st.session_state.get(
-        "nav_page",
-        "Analytics Hub"
-    )
-
-    page_index = 0
-
-    page_mapping = {
-        "Analytics Hub": 0,
-        "Player Scout": 1,
-        "Team Analysis": 2,
-        "League Rankings": 3,
-        "League Leaderboards": 3,
-        "Similar Players": 4,
-        "Player Similarity Finder": 4
-    }
-
-    page_index = page_mapping.get(
-        current_page,
-        0
-    )
-
     selected = option_menu(
         menu_title=None,
-        options=pages,
-        icons=icons,
-        default_index=page_index,
+        options=[
+            "Analytics Hub",
+            "Player Scout",
+            "Team Analysis",
+            "League Rankings",
+            "Similar Players"
+        ],
+        icons=[
+            "house",
+            "person",
+            "shield",
+            "trophy",
+            "bullseye"
+        ],
         styles={
             "container": {
                 "padding": "0!important",
@@ -210,15 +185,14 @@ with st.sidebar:
             },
             "icon": {
                 "color": "#20c997",
-                "font-size": "18px"
+                "font-size": "16px"
             },
             "nav-link": {
-                "font-size": "16px",
+                "font-size": "15px",
                 "text-align": "left",
-                "padding": "12px",
-                "margin": "4px 0",
-                "border-radius": "10px",
-                "--hover-color": "#1f252d"
+                "padding": "10px",
+                "margin": "3px 0",
+                "border-radius": "10px"
             },
             "nav-link-selected": {
                 "background-color": "#1f252d"
@@ -226,6 +200,7 @@ with st.sidebar:
         }
     )
 
+    page = selected
     st.session_state["nav_page"] = selected
 
     st.markdown("""
@@ -236,8 +211,6 @@ with st.sidebar:
         2017–2026
     </div>
     """, unsafe_allow_html=True)
-
-page = st.session_state["nav_page"]
 
 if page == "Analytics Hub":
     home.render(df)
