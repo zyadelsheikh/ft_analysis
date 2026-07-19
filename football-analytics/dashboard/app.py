@@ -123,7 +123,7 @@ with st.sidebar:
 
     st.markdown("""
     <h1 style='margin-bottom:0;color:white'>
-        ⚽ TopFive Analytics
+        ⚽ Football Analytics
     </h1>
 
     <p style='color:#9ca3af;margin-top:0'>
