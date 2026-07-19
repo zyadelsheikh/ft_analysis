@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 def render(df):
 
-    st.markdown("#### 📊 Player Similarity Comparison")
+    st.markdown("### 📊 Player Similarity Comparison")
 
     season = st.selectbox(
         "Season",
