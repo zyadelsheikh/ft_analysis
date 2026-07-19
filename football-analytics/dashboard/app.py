@@ -127,11 +127,11 @@ with st.sidebar:
     page = st.radio(
         "Navigate",
         [
-            " Analytics Hub",
-            " Player Scout",
-            " Team Analysis",
-            " League Leaderboards",
-            " Player Similarity Finder"
+            "⚽ Analytics Hub",
+            "👤 Player Scout",
+            "🛡 Team Analysis",
+            "🏆 League Leaderboards",
+            "🎯 Player Similarity Finder"
         ],
         key="nav_page",
         label_visibility="collapsed",
