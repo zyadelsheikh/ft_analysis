@@ -283,10 +283,10 @@ def _render_compare_table(
     table = pd.DataFrame(data)
 
     st.data_editor(
-        table,
-        use_container_width=True,
-        hide_index=True,
-        disabled=True
+    table,
+    use_container_width=True,
+    hide_index=True,
+    disabled=True
     )
 
 
