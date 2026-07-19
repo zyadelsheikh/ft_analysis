@@ -162,11 +162,11 @@ def render(full_df: pd.DataFrame):
         )
     
         colors = {
-            "Goals": "#00E5FF",
-            "Assists": "#FFD700",
-            "xG": "#FF4D4D",
-            "xA": "#00FF7F"
-        }
+            "Goals": "#00B8D9",          # Sky Blue
+            "Assists": "#FFB000",        # Gold
+            "xG": "#E63946",             # Red
+            "xA": "#2A9D8F"             # Teal Green
+            }
     
         for trace in fig.data:
             if trace.name in colors:
