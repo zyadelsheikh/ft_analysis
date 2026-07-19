@@ -124,18 +124,24 @@ with st.sidebar:
 
         st.divider()
 
-    page = st.radio(
-        "Navigate",
-        [
-            "Analytics Hub",
-            "Player Scout",
-            "Team Analysis",
-            "League Leaderboards",
-            "Player Similarity Finder"
-        ],
-        key="nav_page",
-        label_visibility="collapsed",
-    )
+    st.markdown("### Navigation")
+
+    if st.button("📊 Analytics Hub", use_container_width=True):
+        st.session_state["nav_page"] = "Analytics Hub"
+    
+    if st.button("🔎 Player Scout", use_container_width=True):
+        st.session_state["nav_page"] = "Player Scout"
+    
+    if st.button("🏟️ Team Analysis", use_container_width=True):
+        st.session_state["nav_page"] = "Team Analysis"
+    
+    if st.button("🏆 League Leaderboards", use_container_width=True):
+        st.session_state["nav_page"] = "League Leaderboards"
+    
+    if st.button("🎯 Player Similarity Finder", use_container_width=True):
+        st.session_state["nav_page"] = "Player Similarity Finder"
+    
+    page = st.session_state["nav_page"]
 
     st.caption("Top-5 European Leagues • 2017–2026")
 
