@@ -49,6 +49,18 @@ div[data-baseweb="switch"] input:checked + div {
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+
+div[role="radiogroup"] label {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 
 def _go_to_player(player_name: str, latest: dict):
     st.session_state["nav_page"] = "Player Season"
