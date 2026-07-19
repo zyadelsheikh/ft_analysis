@@ -127,14 +127,21 @@ with st.sidebar:
 
     st.caption("Top-5 European Leagues • 2017–2026")
 
-if page == "Home":
+if "nav_page" not in st.session_state:
+    st.session_state["nav_page"] = "📊 Analytics Hub"
+
+if page == "📊 Analytics Hub":
     home.render(df)
-elif page == "Player Season":
+
+elif page == "🔎 Player Scout":
     player_season.render(df)
-elif page == "Team Season":
+
+elif page == "🏟️ Team Analysis":
     team_season.render(df)
-elif page == "League Ranking":
+
+elif page == "🏆 League Leaderboards":
     league_ranking.render(df)
-elif page == "Similar Players":
-    similarity.render(df)     
+
+elif page == "🎯 Player Similarity Finder":
+    similarity.render(df) 
     
