@@ -116,7 +116,7 @@ def render(full_df: pd.DataFrame):
 
     st.divider()
 
-    st.markdown("### 📈 Performance Trend")
+    st.markdown(f"#### 📈 {player} — Performance Trend Across Seasons")
     
     trend_metrics = [
         m for m in TREND_METRICS
