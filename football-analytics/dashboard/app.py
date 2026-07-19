@@ -72,6 +72,7 @@ hr {
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
+
 st.markdown("""
 <style>
 
@@ -87,7 +88,35 @@ div[data-baseweb="switch"] input:checked + div {
 
 </style>
 """, unsafe_allow_html=True)
+st.markdown("""
+<style>
 
+/* Data Editor */
+[data-testid="stDataEditor"] {
+    border: 1px solid #374151;
+    border-radius: 12px;
+}
+
+/* Header */
+[data-testid="stDataEditor"] thead th {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+    font-weight: 600 !important;
+}
+
+/* Cells */
+[data-testid="stDataEditor"] tbody td {
+    background: #0f172a !important;
+    color: #d1d5db !important;
+}
+
+/* Hover */
+[data-testid="stDataEditor"] tbody tr:hover td {
+    background: #1e293b !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 def _go_to_player(player_name: str, latest: dict):
     st.session_state["nav_page"] = "Player Scout"
