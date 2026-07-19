@@ -64,7 +64,7 @@ div[role="radiogroup"] label {
 
 
 def _go_to_player(player_name: str, latest: dict):
-    st.session_state["nav_page"] = "Player Season"
+    st.session_state["nav_page"] = "Player Scout"
     st.session_state["ps_league"] = latest["league"]
     st.session_state["ps_season"] = latest["season"]
     st.session_state["ps_team"] = "All Teams"
@@ -75,7 +75,7 @@ def _go_to_player(player_name: str, latest: dict):
 
 
 def _go_to_team(team_name: str, latest: dict):
-    st.session_state["nav_page"] = "Team Season"
+    st.session_state["nav_page"] = "Team Analysis"
     st.session_state["ts_league"] = latest["league"]
     st.session_state["ts_season"] = latest["season"]
     st.session_state["ts_team"] = team_name
@@ -89,7 +89,7 @@ if df.empty:
     st.stop()
 
 if "nav_page" not in st.session_state:
-    st.session_state["nav_page"] = "Home"
+    st.session_state["nav_page"] = "Analytics Hub"
 
 with st.sidebar:
 
