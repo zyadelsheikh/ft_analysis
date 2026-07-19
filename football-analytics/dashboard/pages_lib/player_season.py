@@ -161,11 +161,12 @@ def render(full_df: pd.DataFrame):
             marker=dict(size=10)
         )
     
+      
         colors = {
-            "Goals": "#00E5FF",
-            "Assists": "#FFD700",
-            "xG": "#FF4D4D",
-            "xA": "#00FF7F"
+            "Goals": "#3B82F6",     # Blue
+            "Assists": "#F59E0B",   # Amber
+            "xG": "#EF4444",        # Red
+            "xA": "#10B981"         # Emerald
         }
     
         for trace in fig.data:
