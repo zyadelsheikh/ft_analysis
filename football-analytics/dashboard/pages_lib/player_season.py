@@ -116,94 +116,94 @@ def render(full_df: pd.DataFrame):
 
     st.divider()
 
-st.markdown("### 📈 Performance Trend")
-
-trend_metrics = [
-    m for m in TREND_METRICS
-    if metric_has_data(full_df, m)
-]
-
-trend_df = player_trend(
-    full_df,
-    player,
-    trend_metrics
-)
-
-if len(trend_df) >= 2:
-
-    trend_df = trend_df.rename(
-        columns={
-            "Expected_Goals": "xG",
-            "Expected_Assists": "xA"
-        }
-    )
-
-    plot_metrics = [
-        c for c in ["Goals", "Assists", "xG", "xA"]
-        if c in trend_df.columns
+    st.markdown("### 📈 Performance Trend")
+    
+    trend_metrics = [
+        m for m in TREND_METRICS
+        if metric_has_data(full_df, m)
     ]
-
-    fig = px.line(
-        trend_df,
-        x="season",
-        y=plot_metrics,
-        markers=True,
-        labels={
-            "value": "Total",
-            "season": "Season",
-            "variable": "Metric"
+    
+    trend_df = player_trend(
+        full_df,
+        player,
+        trend_metrics
+    )
+    
+    if len(trend_df) >= 2:
+    
+        trend_df = trend_df.rename(
+            columns={
+                "Expected_Goals": "xG",
+                "Expected_Assists": "xA"
+            }
+        )
+    
+        plot_metrics = [
+            c for c in ["Goals", "Assists", "xG", "xA"]
+            if c in trend_df.columns
+        ]
+    
+        fig = px.line(
+            trend_df,
+            x="season",
+            y=plot_metrics,
+            markers=True,
+            labels={
+                "value": "Total",
+                "season": "Season",
+                "variable": "Metric"
+            }
+        )
+    
+        fig.update_traces(
+            mode="lines+markers",
+            line=dict(width=4),
+            marker=dict(size=10)
+        )
+    
+        colors = {
+            "Goals": "#00E5FF",
+            "Assists": "#FFD700",
+            "xG": "#FF4D4D",
+            "xA": "#00FF7F"
         }
-    )
-
-    fig.update_traces(
-        mode="lines+markers",
-        line=dict(width=4),
-        marker=dict(size=10)
-    )
-
-    colors = {
-        "Goals": "#00E5FF",
-        "Assists": "#FFD700",
-        "xG": "#FF4D4D",
-        "xA": "#00FF7F"
-    }
-
-    for trace in fig.data:
-        if trace.name in colors:
-            trace.line.color = colors[trace.name]
-
-    fig.update_layout(
-        height=500,
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(size=16),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.08,
-            xanchor="center",
-            x=0.5,
-            font=dict(size=16)
-        ),
-        margin=dict(
-            l=20,
-            r=20,
-            t=20,
-            b=20
-        ),
-        xaxis_title="Season",
-        yaxis_title="Performance"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-else:
-    st.info(
-        f"{player} only has one season on record — nothing to trend yet."
-    )
+    
+        for trace in fig.data:
+            if trace.name in colors:
+                trace.line.color = colors[trace.name]
+    
+        fig.update_layout(
+            height=500,
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(size=16),
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.08,
+                xanchor="center",
+                x=0.5,
+                font=dict(size=16)
+            ),
+            margin=dict(
+                l=20,
+                r=20,
+                t=20,
+                b=20
+            ),
+            xaxis_title="Season",
+            yaxis_title="Performance"
+        )
+    
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+    
+    else:
+        st.info(
+            f"{player} only has one season on record — nothing to trend yet."
+        )
 
     st.divider()
     st.markdown("#### Season-by-Season Performance")
