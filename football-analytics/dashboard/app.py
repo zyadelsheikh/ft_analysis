@@ -79,26 +79,53 @@ if "nav_page" not in st.session_state:
     st.session_state["nav_page"] = "Home"
 
 with st.sidebar:
-    st.markdown("## ⚽ Football Analytics")
 
-    query = st.text_input("Quick search — player or team", key="global_search", placeholder="e.g. Messi, Arsenal…")
+    st.markdown("## ⚽ Football Data Analytics")
+
+    query = st.text_input(
+        "Search Players & Clubs",
+        key="global_search",
+        placeholder="e.g. Messi, Arsenal..."
+    )
+
     if query:
         matching_players, matching_teams = search_entities(df, query)
+
         if not matching_players and not matching_teams:
-            st.caption("No matches.")
+            st.caption("No matches found")
+
         for p in matching_players:
-            st.button(f"🧑 {p}", key=f"hit_player_{p}", on_click=_go_to_player, args=(p, player_latest_context(df, p)))
+            st.button(
+                f"👤 {p}",
+                key=f"hit_player_{p}",
+                on_click=_go_to_player,
+                args=(p, player_latest_context(df, p))
+            )
+
         for t in matching_teams:
-            st.button(f"🛡️ {t}", key=f"hit_team_{t}", on_click=_go_to_team, args=(t, team_latest_context(df, t)))
+            st.button(
+                f"🏟️ {t}",
+                key=f"hit_team_{t}",
+                on_click=_go_to_team,
+                args=(t, team_latest_context(df, t))
+            )
+
         st.divider()
 
     page = st.radio(
         "Navigate",
-        ["Home", "Player Season", "Team Season", "League Ranking","Similar Players"],
+        [
+            "📊 Analytics Hub",
+            "🔎 Player Scout",
+            "🏟️ Team Analysis",
+            "🏆 League Leaderboards",
+            "🎯 Player Similarity Finder"
+        ],
         key="nav_page",
         label_visibility="collapsed",
     )
-    st.caption("Top-5 European leagues, 2017-2026")
+
+    st.caption("Top-5 European Leagues • 2017–2026")
 
 if page == "Home":
     home.render(df)
