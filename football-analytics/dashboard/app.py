@@ -1,6 +1,13 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
-from data import load_denormalized, search_entities, player_latest_context, team_latest_context
+from data import (
+    load_denormalized,
+    search_entities,
+    player_latest_context,
+    team_latest_context
+)
+
 from pages_lib import (
     home,
     player_season,
@@ -8,59 +15,76 @@ from pages_lib import (
     league_ranking,
     similarity
 )
-st.set_page_config(page_title="Football Analytics", page_icon="⚽", layout="wide")
+
+st.set_page_config(
+    page_title="TopFive Analytics",
+    page_icon="⚽",
+    layout="wide"
+)
 
 CUSTOM_CSS = """
 <style>
-.block-container {padding-top: 1.5rem; padding-bottom: 2rem;}
-[data-testid="stMetric"] {
-    background-color: rgba(45, 212, 191, 0.06);
-    border: 1px solid rgba(45, 212, 191, 0.18);
-    border-radius: 10px;
-    padding: 10px 14px;
+
+/* ---------- APP ---------- */
+
+.stApp{
+    background:#0f1318;
 }
-[data-testid="stMetricLabel"] {opacity: 0.75; font-size: 0.8rem;}
-[data-testid="stMetricValue"] {font-size: 1.35rem;}
-section[data-testid="stSidebar"] {border-right: 1px solid rgba(255,255,255,0.06);}
-.search-hit-btn button {width: 100%; text-align: left;}
-hr {margin: 0.6rem 0;}
+
+/* ---------- SIDEBAR ---------- */
+
+[data-testid="stSidebar"]{
+    background:#111418;
+    border-right:1px solid #232a33;
+}
+
+/* ---------- SEARCH ---------- */
+
+.stTextInput input{
+    background:#181c21 !important;
+    color:white !important;
+
+    border:1px solid #2b313a !important;
+    border-radius:12px !important;
+}
+
+/* ---------- METRICS ---------- */
+
+[data-testid="stMetric"]{
+    background:#181c21;
+    border:1px solid #252b33;
+    border-radius:12px;
+    padding:12px;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.block-container{
+    padding-top:1rem;
+    padding-bottom:2rem;
+}
+
+/* ---------- TOGGLES ---------- */
+
+div[data-baseweb="switch"] > div{
+    background-color:#4b5563 !important;
+}
+
+div[data-baseweb="switch"] input:checked + div{
+    background-color:#20c997 !important;
+}
+
+/* ---------- RADIO ---------- */
+
+div[role="radiogroup"] label{
+    font-size:18px !important;
+    font-weight:600 !important;
+}
+
 </style>
 """
 
-
-st.markdown("""
-<style>
-
-/* Toggle OFF */
-div[data-baseweb="switch"] > div {
-    background-color: #4b5563 !important;
-}
-
-/* Toggle ON */
-div[data-baseweb="switch"] input:checked + div {
-    background-color: #2dd4bf !important;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-
-
-
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-
-div[role="radiogroup"] label {
-    font-size: 18px !important;
-    font-weight: 600 !important;
-    margin-bottom: 6px !important;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
 
 
 def _go_to_player(player_name: str, latest: dict):
@@ -85,7 +109,9 @@ def _go_to_team(team_name: str, latest: dict):
 df = load_denormalized()
 
 if df.empty:
-    st.error("No data found. Run prj_fixed.ipynb first to generate the processed/*.csv files.")
+    st.error(
+        "No data found. Run prj_fixed.ipynb first to generate the processed/*.csv files."
+    )
     st.stop()
 
 if "nav_page" not in st.session_state:
@@ -93,7 +119,15 @@ if "nav_page" not in st.session_state:
 
 with st.sidebar:
 
-    st.markdown("# ⚽Football Data Analytics")
+    st.markdown("""
+    <h1 style='margin-bottom:0;color:white'>
+        ⚽ TopFive Analytics
+    </h1>
+
+    <p style='color:#9ca3af;margin-top:0'>
+        Football Intelligence Platform
+    </p>
+    """, unsafe_allow_html=True)
 
     query = st.text_input(
         "Search Players & Clubs",
@@ -102,6 +136,7 @@ with st.sidebar:
     )
 
     if query:
+
         matching_players, matching_teams = search_entities(df, query)
 
         if not matching_players and not matching_teams:
@@ -125,28 +160,84 @@ with st.sidebar:
 
         st.divider()
 
+    pages = [
+        "Analytics Hub",
+        "Player Scout",
+        "Team Analysis",
+        "League Rankings",
+        "Similar Players"
+    ]
 
-    if st.button("Analytics Hub", use_container_width=True):
-        st.session_state["nav_page"] = "Analytics Hub"
-    
-    if st.button("Player Scout", use_container_width=True):
-        st.session_state["nav_page"] = "Player Scout"
-    
-    if st.button("Team Analysis", use_container_width=True):
-        st.session_state["nav_page"] = "Team Analysis"
-    
-    if st.button("League Leaderboards", use_container_width=True):
-        st.session_state["nav_page"] = "League Leaderboards"
-    
-    if st.button("Player Similarity Finder", use_container_width=True):
-        st.session_state["nav_page"] = "Player Similarity Finder"
-    
-    page = st.session_state["nav_page"]
+    icons = [
+        "house",
+        "person",
+        "shield",
+        "trophy",
+        "bullseye"
+    ]
 
-    st.caption("Top-5 European Leagues • 2017–2026")
+    current_page = st.session_state.get(
+        "nav_page",
+        "Analytics Hub"
+    )
 
-if "nav_page" not in st.session_state:
-    st.session_state["nav_page"] = "📊 Analytics Hub"
+    page_index = 0
+
+    page_mapping = {
+        "Analytics Hub": 0,
+        "Player Scout": 1,
+        "Team Analysis": 2,
+        "League Rankings": 3,
+        "League Leaderboards": 3,
+        "Similar Players": 4,
+        "Player Similarity Finder": 4
+    }
+
+    page_index = page_mapping.get(
+        current_page,
+        0
+    )
+
+    selected = option_menu(
+        menu_title=None,
+        options=pages,
+        icons=icons,
+        default_index=page_index,
+        styles={
+            "container": {
+                "padding": "0!important",
+                "background-color": "#111418"
+            },
+            "icon": {
+                "color": "#20c997",
+                "font-size": "18px"
+            },
+            "nav-link": {
+                "font-size": "16px",
+                "text-align": "left",
+                "padding": "12px",
+                "margin": "4px 0",
+                "border-radius": "10px",
+                "--hover-color": "#1f252d"
+            },
+            "nav-link-selected": {
+                "background-color": "#1f252d"
+            }
+        }
+    )
+
+    st.session_state["nav_page"] = selected
+
+    st.markdown("""
+    <hr>
+
+    <div style='color:#9ca3af;font-size:13px'>
+        🌍 Top 5 European Leagues<br>
+        2017–2026
+    </div>
+    """, unsafe_allow_html=True)
+
+page = st.session_state["nav_page"]
 
 if page == "Analytics Hub":
     home.render(df)
@@ -157,9 +248,8 @@ elif page == "Player Scout":
 elif page == "Team Analysis":
     team_season.render(df)
 
-elif page == "League Leaderboards":
+elif page == "League Rankings":
     league_ranking.render(df)
 
-elif page == "Player Similarity Finder":
-    similarity.render(df) 
-    
+elif page == "Similar Players":
+    similarity.render(df)
