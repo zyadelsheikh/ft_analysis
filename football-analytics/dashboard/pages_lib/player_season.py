@@ -17,7 +17,7 @@ STAT_CARDS = [
     ("Expected_Goals", "xG"), ("Expected_Assists", "xA"),
     ("Shots", "Shots"), ("Shots_On_Target", "SoT"),
     ("Key_Passes", "Key Passes"), ("Tackles", "Tackles"),
-    ("Interceptions", "Interceptions"), ("Finishing Overperformance", "G - xG"),
+    ("Interceptions", "Interceptions"), ("xg_diff", "G - xG"),
 ]
 
 EXTRA_STAT_CARDS = [
@@ -221,7 +221,7 @@ def render(full_df: pd.DataFrame):
 
 def _render_header(player, league, season, row):
 
-    st.markdown(f"## {player}")
+    st.markdown(f"### {player}")
 
     st.caption(f"{row['team']} · {league} · {season}")
 
