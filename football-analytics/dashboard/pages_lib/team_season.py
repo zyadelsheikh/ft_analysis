@@ -19,7 +19,7 @@ TREND_METRICS = ["Goals", "Assists"]
 def render(full_df: pd.DataFrame):
     with st.sidebar:
         pool, league, season, season_id = season_league_filters(full_df, "ts")
-        st.markdown("#### Team Selection")
+        st.markdown("### Team Selection")
         teams = sorted(pool["team"].dropna().unique())
         if not teams:
             st.warning("No teams found for this competition / season.")
@@ -35,7 +35,7 @@ def render(full_df: pd.DataFrame):
         st.warning("No team data available for this competition / season.")
         return
 
-    st.markdown(f"## {team}")
+    st.markdown(f"### {team}")
     st.caption(f"{league} · {season}")
 
     c1, c2, c3, c4, c5 = st.columns(5)
