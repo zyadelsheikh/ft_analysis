@@ -126,19 +126,19 @@ with st.sidebar:
 
     st.markdown("### Navigation")
 
-    if st.button("📊 Analytics Hub", use_container_width=True):
+    if st.button("Analytics Hub", use_container_width=True):
         st.session_state["nav_page"] = "Analytics Hub"
     
-    if st.button("🔎 Player Scout", use_container_width=True):
+    if st.button("Player Scout", use_container_width=True):
         st.session_state["nav_page"] = "Player Scout"
     
-    if st.button("🏟️ Team Analysis", use_container_width=True):
+    if st.button("Team Analysis", use_container_width=True):
         st.session_state["nav_page"] = "Team Analysis"
     
-    if st.button("🏆 League Leaderboards", use_container_width=True):
+    if st.button("League Leaderboards", use_container_width=True):
         st.session_state["nav_page"] = "League Leaderboards"
     
-    if st.button("🎯 Player Similarity Finder", use_container_width=True):
+    if st.button("Player Similarity Finder", use_container_width=True):
         st.session_state["nav_page"] = "Player Similarity Finder"
     
     page = st.session_state["nav_page"]
