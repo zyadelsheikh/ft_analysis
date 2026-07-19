@@ -116,7 +116,7 @@ def render(full_df: pd.DataFrame):
 
     st.divider()
 
-    st.markdown(f"#### 📈 {player} — Performance Trend Across Seasons")
+    st.markdown("### 📈 Performance Trend")
     
     trend_metrics = [
         m for m in TREND_METRICS
@@ -157,15 +157,15 @@ def render(full_df: pd.DataFrame):
     
         fig.update_traces(
             mode="lines+markers",
-            line=dict(width=2),
-            marker=dict(size=8)
+            line=dict(width=4),
+            marker=dict(size=10)
         )
     
-       colors = {
-            "Goals": "#3B82F6",     # Blue
-            "Assists": "#F59E0B",   # Amber
-            "xG": "#EF4444",        # Red
-            "xA": "#10B981"         # Emerald
+        colors = {
+            "Goals": "#00E5FF",
+            "Assists": "#FFD700",
+            "xG": "#FF4D4D",
+            "xA": "#00FF7F"
         }
     
         for trace in fig.data:
