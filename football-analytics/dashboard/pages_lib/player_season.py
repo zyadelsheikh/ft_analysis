@@ -56,6 +56,11 @@ def _inject_styles():
     .ps-kpi-label { color:#a9beb9; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.85px; }
     .ps-kpi-value { color:#e9faf5; font-size:25px; font-weight:800; line-height:1.15; margin-top:7px; }
     .ps-section { color:#e7f5f1; font-size:19px; font-weight:750; margin:18px 0 14px; letter-spacing:.05px; }
+    .filter-panel-title { color:#b7d0ca; font-size:11px; font-weight:750; letter-spacing:1px; text-transform:uppercase; margin:12px 0 8px; }
+    [data-testid="stSelectbox"] svg, [data-testid="stMultiSelect"] svg { color:#62e6b5 !important; fill:#62e6b5 !important; }
+    [data-testid="stSlider"] [role="slider"] { background:#44d7a7 !important; border:2px solid #0e2623 !important; box-shadow:0 0 0 2px rgba(68,215,167,.2) !important; }
+    [data-testid="stSlider"] [data-baseweb="slider"] > div > div > div { background:#44d7a7 !important; }
+    [data-testid="stSlider"] [data-baseweb="slider"] > div > div:first-child { background:#203334 !important; }
     .ps-card { background:linear-gradient(145deg,rgba(28,52,51,.92),rgba(17,31,31,.96)); border:1px solid rgba(68,215,167,.2); border-radius:15px; padding:14px 15px; margin-bottom:10px; box-shadow:0 8px 24px rgba(0,0,0,.1); }
     .ps-stat-label { color:#a7bfba; font-size:12px; }
     .ps-stat-value { color:#f4faf8; font-size:21px; font-weight:750; margin-top:4px; }
@@ -75,7 +80,7 @@ def render(full_df: pd.DataFrame):
     with st.sidebar:
         pool, league, season, _ = season_league_filters(full_df, "ps")
         pool = min_minutes_filter(pool, "ps")
-        st.markdown("### Player Selection")
+        st.markdown('<div class="filter-panel-title">Player Selection</div>', unsafe_allow_html=True)
         pool, team = team_filter(pool, "ps")
 
         players = sorted(pool["player"].dropna().unique())
