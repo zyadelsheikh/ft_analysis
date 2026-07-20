@@ -21,7 +21,7 @@ def render(full_df: pd.DataFrame):
     inject_styles()
     with st.sidebar:
         pool, league, season, season_id = season_league_filters(full_df, "ts")
-        st.markdown("### Team Selection")
+        st.markdown('<div class="filter-panel-title">Team Selection</div>', unsafe_allow_html=True)
         teams = sorted(pool["team"].dropna().unique())
         if not teams:
             st.warning("No teams found for this competition / season.")
@@ -29,7 +29,7 @@ def render(full_df: pd.DataFrame):
         team = st.selectbox("Select Team", teams, key="ts_team")
         st.caption(f"{len(teams)} teams in this competition")
 
-        st.markdown("### Compare")
+        st.markdown('<div class="filter-panel-title">Compare Teams</div>', unsafe_allow_html=True)
         compare_teams = any_league_team_multiselect(full_df, team, "ts")
 
     squad = pool[pool["team"] == team]
