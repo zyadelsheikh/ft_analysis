@@ -11,7 +11,7 @@ def season_league_filters(df: pd.DataFrame, key_prefix: str):
     callers look up the same season across OTHER leagues (used for
     cross-league team comparisons).
     """
-    st.markdown("### Data Filters")
+    st.markdown('<div class="filter-panel-title">Data Filters</div>', unsafe_allow_html=True)
 
     league_key = f"{key_prefix}_league"
     season_key = f"{key_prefix}_season"
@@ -33,6 +33,7 @@ def season_league_filters(df: pd.DataFrame, key_prefix: str):
 
 
 def min_minutes_filter(df: pd.DataFrame, key_prefix: str):
+    st.markdown('<div class="filter-panel-title">Playing Time</div>', unsafe_allow_html=True)
     key = f"{key_prefix}_min_minutes"
     max_minutes = int(df["Minutes_Played"].max()) if not df.empty else 0
     if key in st.session_state:
@@ -46,6 +47,7 @@ def min_minutes_filter(df: pd.DataFrame, key_prefix: str):
 
 
 def team_filter(df: pd.DataFrame, key_prefix: str):
+    st.markdown('<div class="filter-panel-title">Squad Filter</div>', unsafe_allow_html=True)
     teams = ["All Teams"] + sorted(df["team"].dropna().unique().tolist())
     team = st.selectbox("Team", teams, key=f"{key_prefix}_team")
     if team != "All Teams":
@@ -61,6 +63,7 @@ def any_league_season_player_picker(full_df: pd.DataFrame, key_prefix: str, labe
 
     Returns (player_name, its_own_peer_pool) or (None, None).
     """
+    st.markdown('<div class="filter-panel-title">Comparison Player</div>', unsafe_allow_html=True)
     leagues = sorted(full_df["league"].dropna().unique())
     league = st.selectbox("Compare League", leagues, key=f"{key_prefix}_league")
 
@@ -81,6 +84,7 @@ def any_league_season_player_picker(full_df: pd.DataFrame, key_prefix: str, labe
 def any_league_team_multiselect(full_df: pd.DataFrame, exclude_team: str, key_prefix: str):
     """Team multiselect sourced from ALL leagues (not just the current
     page's league), so you can compare teams across competitions."""
+    st.markdown('<div class="filter-panel-title">Team Comparison</div>', unsafe_allow_html=True)
     teams = sorted(t for t in full_df["team"].dropna().unique() if t != exclude_team)
     return st.multiselect("Add teams to compare (any league)", teams, key=f"{key_prefix}_compare_teams")
 
