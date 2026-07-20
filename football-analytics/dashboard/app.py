@@ -42,6 +42,38 @@ CUSTOM_CSS = """
 [data-testid="stSidebar"] .stButton button { border:1px solid #294343; background:#172323; color:#d8ebe6; border-radius:10px; text-align:left; }
 [data-testid="stSidebar"] .stButton button:hover { border-color:#44d7a7; color:#fff; }
 
+[data-testid="stSidebar"] [data-testid="stSelectbox"] label,
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] label,
+[data-testid="stSidebar"] [data-testid="stSlider"] label {
+    color:#c7ddd7 !important;
+    font-size:13px !important;
+    font-weight:600 !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stSelectbox"] svg,
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] svg {
+    color:#62e6b5 !important;
+    fill:#62e6b5 !important;
+}
+
+[data-testid="stSlider"] [role="slider"] {
+    background:#44d7a7 !important;
+    border:2px solid #0e2623 !important;
+    box-shadow:0 0 0 2px rgba(68,215,167,.2) !important;
+}
+
+[data-testid="stSlider"] [data-baseweb="slider"] > div > div > div {
+    background:#44d7a7 !important;
+}
+
+[data-testid="stSlider"] [data-baseweb="slider"] > div > div:first-child {
+    background:#203334 !important;
+}
+
+div[data-baseweb="switch"] input:checked + div {
+    background:#44d7a7 !important;
+}
+
 [data-testid="stMetric"] {
     background-color: rgba(45, 212, 191, 0.06);
     border: 1px solid rgba(45, 212, 191, 0.18);
@@ -177,7 +209,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     query = st.text_input(
-        "Search a player or club",
+        "Search Players & Clubs",
         key="global_search",
         placeholder="e.g. Messi, Arsenal..."
     )
