@@ -245,7 +245,7 @@ with st.sidebar:
     query = st.text_input(
         "Find a player or club",
         key="global_search",
-        placeholder="Type a player or club name...",
+        placeholder="e.g. Messi, Arsenal..",
         label_visibility="collapsed",
     )
     
