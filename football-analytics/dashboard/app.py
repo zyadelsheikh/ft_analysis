@@ -219,23 +219,23 @@ if "nav_page" not in st.session_state:
 
 with st.sidebar:
 
-    st.markdown(
+   st.markdown(
     """
     <div class="sidebar-block-title">
         Find a player or club
     </div>
     """,
     unsafe_allow_html=True,
-    )
+  )
 
-    query = st.text_input(
-        "Find a player or club",
-        key="global_search",
-        placeholder="Type a player or club name...",
-        label_visibility="collapsed",
-    )
-    
-    if query:
+   query = st.text_input(
+    "Find a player or club",
+    key="global_search",
+    placeholder="Type a player or club name...",
+    label_visibility="collapsed",
+  )
+
+   if query:
 
         matching_players, matching_teams = search_entities(df, query)
 
