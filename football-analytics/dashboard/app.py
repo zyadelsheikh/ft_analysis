@@ -233,12 +233,18 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     st.markdown(
-    """
-    <div class="sidebar-block-title">
-        Find a player or club
-    </div>
-    """,
-    unsafe_allow_html=True,
+        """
+        <div style="
+            color:#d7ebe5;
+            font-size:13px;
+            font-weight:750;
+            letter-spacing:.4px;
+            margin-bottom:8px;
+        ">
+            Find a player or club
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     query = st.text_input(
