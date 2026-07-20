@@ -233,7 +233,7 @@ with st.sidebar:
     <div class="sidebar-block-title">Global Search</div>
     """, unsafe_allow_html=True)
 
-     query = st.text_input(
+    query = st.text_input(
         "Search Players & Clubs",
         key="global_search",
         placeholder="e.g. Messi, Arsenal..."
