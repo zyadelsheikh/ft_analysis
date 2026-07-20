@@ -7,7 +7,7 @@ from data import metric_has_data, team_trend, team_metric_totals
 from pages_lib.filters import (
     season_league_filters, export_buttons, any_league_team_multiselect,
 )
-from pages_lib.ui import inject_styles, hero, section
+from pages_lib.ui import inject_styles, hero, section, style_chart, styled_dataframe
 
 COMPARE_METRICS = ["Goals", "Assists", "Minutes_Played"]
 ADVANCED_TEAM_METRICS = [
@@ -72,7 +72,7 @@ def render(full_df: pd.DataFrame):
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#b8cfca"),
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(style_chart(fig), width="stretch")
     else:
         st.info("No goal data available for this squad in this season.")
 
@@ -101,8 +101,8 @@ def render(full_df: pd.DataFrame):
                 yaxis=dict(gridcolor="#29403e", zeroline=False),
                 legend=dict(bgcolor="rgba(18,35,35,.85)", bordercolor="#274141", borderwidth=1),
             )
-            st.plotly_chart(fig, width="stretch")
-            st.dataframe(summary, width="stretch", hide_index=True)
+            st.plotly_chart(style_chart(fig), width="stretch")
+            st.dataframe(styled_dataframe(summary), width="stretch", hide_index=True)
 
     section(f"{team} — Trend Across Seasons", "chart")
     trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
@@ -152,7 +152,7 @@ def render(full_df: pd.DataFrame):
                 borderwidth=1,
             ),
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(style_chart(fig), width="stretch")
     else:
         st.info(f"{team} only has one season on record — nothing to trend yet.")
 
@@ -161,5 +161,5 @@ def render(full_df: pd.DataFrame):
     if metric_has_data(squad, "Expected_Goals"):
         display_cols += ["Expected_Goals", "Expected_Assists"]
     squad_table = squad[display_cols].sort_values("Minutes_Played", ascending=False)
-    st.dataframe(squad_table, width="stretch", hide_index=True)
+    st.dataframe(styled_dataframe(squad_table), width="stretch", hide_index=True)
     export_buttons(squad_table, f"{team.replace(' ', '_')}_{season}_squad", "ts")
