@@ -219,8 +219,6 @@ if "nav_page" not in st.session_state:
 
 with st.sidebar:
 
-   
-
     st.markdown("""
     <div class="sidebar-brand">
         <div class="sidebar-brand-mark">
@@ -235,19 +233,14 @@ with st.sidebar:
     <div class="sidebar-block-title">Global Search</div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="sidebar-brand">
-        <div class="sidebar-brand-mark">
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9"/>
-                <path d="m12 7 2.2 1.6-.8 2.6h-2.8l-.8-2.6L12 7Z"/>
-                <path d="m5.1 9.2 3.3.7M15.6 9.9l3.3-.7M10.6 11.2 8.8 15M13.4 11.2l1.8 3.8M8.8 15l3.2 2.1 3.2-2.1"/>
-            </svg>
-        </div>
-        <div><div class="sidebar-brand-title">Football Analytics</div><div class="sidebar-brand-subtitle">Football Intelligence Platform</div></div>
+    st.markdown(
+    """
+    <div class="sidebar-block-title">
+        Find a player or club
     </div>
-    <div class="sidebar-block-title">Global Search</div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True,
+    )
 
     query = st.text_input(
         "Find a player or club",
