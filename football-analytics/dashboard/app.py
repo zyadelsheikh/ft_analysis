@@ -177,7 +177,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     query = st.text_input(
-        "Search Players & Clubs",
+        "Search a player or club",
         key="global_search",
         placeholder="e.g. Messi, Arsenal..."
     )
