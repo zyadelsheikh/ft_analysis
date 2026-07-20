@@ -1,179 +1,165 @@
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from pages_lib.filters import season_league_filters, export_buttons
-from pages_lib.ui import inject_styles, hero, section
+from data import metric_has_data, team_trend, team_metric_totals
+from pages_lib.filters import (
+    season_league_filters, export_buttons, any_league_team_multiselect,
+)
+from pages_lib.ui import inject_styles, hero, section, style_chart, styled_dataframe
+
+COMPARE_METRICS = ["Goals", "Assists", "Minutes_Played"]
+ADVANCED_TEAM_METRICS = [
+    ("Expected_Goals", "Total xG"), ("Shots", "Total Shots"),
+    ("Key_Passes", "Total Key Passes"), ("Tackles", "Total Tackles"),
+]
+TREND_METRICS = ["Goals", "Assists"]
 
 
-def render(df: pd.DataFrame):
+def render(full_df: pd.DataFrame):
     inject_styles()
-
     with st.sidebar:
-        pool, league, season, _ = season_league_filters(df, "home")
+        pool, league, season, season_id = season_league_filters(full_df, "ts")
+        st.markdown('<div class="filter-panel-title">Team Selection</div>', unsafe_allow_html=True)
+        teams = sorted(pool["team"].dropna().unique())
+        if not teams:
+            st.warning("No teams found for this competition / season.")
+            return
+        team = st.selectbox("Select Team", teams, key="ts_team")
+        st.caption(f"{len(teams)} teams in this competition")
 
-    hero(
-        "Dashboard Overview",
-        "Performance Overview",
-        f"{league} · {season}",
-    )
+        st.markdown('<div class="filter-panel-title">Compare Teams</div>', unsafe_allow_html=True)
+        compare_teams = any_league_team_multiselect(full_df, team, "ts")
+
+    squad = pool[pool["team"] == team]
+    if squad.empty:
+        st.warning("No team data available for this competition / season.")
+        return
+
+    hero("Team Profile", team, f"{league} · {season}")
 
     c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("Squad Size", squad["player"].nunique())
+    c2.metric("Goals", int(squad["Goals"].sum()))
+    c3.metric("Assists", int(squad["Assists"].sum()))
+    avg_age = squad["Age"].mean()
+    c4.metric("Avg Age", f"{avg_age:.1f}" if pd.notna(avg_age) else "—")
+    total_min = int(squad["Minutes_Played"].sum())
+    c5.metric("Total Minutes", f"{total_min:,}")
 
-    c1.metric(
-        "Players",
-        pool["player"].nunique(),
-    )
+    if metric_has_data(squad, "Expected_Goals"):
+        section("Team Stats Breakdown", "chart")
+        cols = st.columns(len(ADVANCED_TEAM_METRICS))
+        for i, (col, label) in enumerate(ADVANCED_TEAM_METRICS):
+            total = squad[col].sum() if col in squad.columns else np.nan
+            cols[i].metric(label, f"{total:.0f}" if pd.notna(total) else "—")
 
-    c2.metric(
-        "Teams",
-        pool["team"].nunique(),
-    )
-
-    c3.metric(
-        "Total Goals",
-        int(pool["Goals"].sum()),
-    )
-
-    c4.metric(
-        "Total Assists",
-        int(pool["Assists"].sum()),
-    )
-
-    avg_age = pool["Age"].mean()
-
-    c5.metric(
-        "Avg. Age",
-        f"{avg_age:.1f}" if pd.notna(avg_age) else "—",
-    )
-
-    left, right = st.columns(2)
-
-    with left:
-        section("Top Scorers", "trophy")
-
-        top_scorers = (
-            pool[["player", "team", "Goals"]]
-            .sort_values("Goals", ascending=False)
-            .head(10)
-        )
-
-        if top_scorers["Goals"].sum() > 0:
-            fig = px.bar(
-                top_scorers.sort_values("Goals"),
-                x="Goals",
-                y="player",
-                orientation="h",
-                hover_data=["team"],
-                color_discrete_sequence=["#2dd4bf"],
-            )
-
-            fig.update_layout(
-                yaxis_title="",
-                height=380,
-                margin=dict(
-                    l=10,
-                    r=10,
-                    t=10,
-                    b=10,
-                ),
-            )
-
-            st.plotly_chart(
-                fig,
-                width="stretch",
-            )
-        else:
-            st.info(
-                "No goal data for this competition / season."
-            )
-
-    with right:
-        section("Top Assisters", "target")
-
-        top_assists = (
-            pool[["player", "team", "Assists"]]
-            .sort_values("Assists", ascending=False)
-            .head(10)
-        )
-
-        if top_assists["Assists"].sum() > 0:
-            fig = px.bar(
-                top_assists.sort_values("Assists"),
-                x="Assists",
-                y="player",
-                orientation="h",
-                hover_data=["team"],
-                color_discrete_sequence=["#38bdf8"],
-            )
-
-            fig.update_layout(
-                yaxis_title="",
-                height=380,
-                margin=dict(
-                    l=10,
-                    r=10,
-                    t=10,
-                    b=10,
-                ),
-            )
-
-            st.plotly_chart(
-                fig,
-                width="stretch",
-            )
-        else:
-            st.info(
-                "No assist data for this competition / season."
-            )
-
-    section("Goals by Team", "chart")
-
-    team_goals = (
-        pool.groupby("team", as_index=False)["Goals"]
-        .sum()
-        .sort_values("Goals", ascending=False)
-    )
-
-    if team_goals["Goals"].sum() > 0:
+    section("Top Scorers", "trophy")
+    top = squad.sort_values("Goals", ascending=False).head(10)
+    if top["Goals"].sum() > 0:
         fig = px.bar(
-            team_goals,
-            x="team",
-            y="Goals",
+            top, x="Goals", y="player", orientation="h",
+            labels={"player": "", "Goals": "Goals"},
             color_discrete_sequence=["#2dd4bf"],
         )
+        fig.update_layout(
+            yaxis=dict(categoryorder="total ascending", gridcolor="#29403e", zeroline=False),
+            xaxis=dict(gridcolor="#29403e", zeroline=False),
+            height=350,
+            margin=dict(l=10, r=10, t=10, b=10),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#b8cfca"),
+        )
+        st.plotly_chart(style_chart(fig), width="stretch")
+    else:
+        st.info("No goal data available for this squad in this season.")
+
+    if compare_teams:
+        section(f"Team Comparison — {team} vs {', '.join(compare_teams)}", "users")
+        st.caption("Compared using the same season as the primary team, regardless of league.")
+        all_teams = [team] + compare_teams
+        summary = team_metric_totals(full_df, all_teams, season_id, COMPARE_METRICS)
+        if summary.empty:
+            st.info("No overlapping season data found for the selected teams.")
+        else:
+            summary = summary.set_index("team").reindex(all_teams).reset_index()
+            melted = summary.melt(id_vars="team", var_name="Metric", value_name="Total")
+            fig = px.bar(
+                melted, x="Metric", y="Total", color="team", barmode="group",
+                color_discrete_sequence=px.colors.qualitative.Set2,
+            )
+            fig.update_layout(
+                height=380,
+                margin=dict(l=10, r=10, t=20, b=10),
+                legend_title="",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#b8cfca"),
+                xaxis=dict(gridcolor="#29403e", zeroline=False),
+                yaxis=dict(gridcolor="#29403e", zeroline=False),
+                legend=dict(bgcolor="rgba(18,35,35,.85)", bordercolor="#274141", borderwidth=1),
+            )
+            st.plotly_chart(style_chart(fig), width="stretch")
+            st.dataframe(styled_dataframe(summary), width="stretch", hide_index=True)
+
+    section(f"{team} — Trend Across Seasons", "chart")
+    trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
+    trend_df = team_trend(full_df, team, trend_metrics)
+    if len(trend_df) >= 2:
+        fig = px.line(
+            trend_df, x="season", y=trend_metrics, markers=True,
+            labels={"value": "Total", "season": "Season", "variable": "Metric"},
+        )
+        trend_colors = {"Goals": "#44d7a7", "Assists": "#60a5fa"}
+        fig.update_traces(
+            mode="lines+markers",
+            line=dict(width=3),
+            marker=dict(size=7, line=dict(width=1, color="#0f1919")),
+        )
+        for trace in fig.data:
+            if trace.name in trend_colors:
+                trace.line.color = trend_colors[trace.name]
+                trace.marker.color = trend_colors[trace.name]
 
         fig.update_layout(
-            xaxis_title="",
-            height=380,
-            margin=dict(
-                l=10,
-                r=10,
-                t=10,
-                b=10,
+            height=390,
+            margin=dict(l=20, r=20, t=18, b=20),
+            legend_title="",
+            hovermode="x unified",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#b8cfca"),
+            xaxis=dict(
+                title="Season",
+                showgrid=False,
+                linecolor="#35504c",
+            ),
+            yaxis=dict(
+                title="Total",
+                gridcolor="#29403e",
+                zeroline=False,
+                linecolor="#35504c",
+            ),
+            legend=dict(
+                orientation="h",
+                y=1.08,
+                x=.5,
+                xanchor="center",
+                bgcolor="rgba(18,35,35,.85)",
+                bordercolor="#274141",
+                borderwidth=1,
             ),
         )
-
-        st.plotly_chart(
-            fig,
-            width="stretch",
-        )
+        st.plotly_chart(style_chart(fig), width="stretch")
     else:
-        st.info(
-            "No goal data for this competition / season."
-        )
+        st.info(f"{team} only has one season on record — nothing to trend yet.")
 
-    with st.expander(
-        "View / export raw table for this competition & season"
-    ):
-        st.dataframe(
-            pool,
-            width="stretch",
-            hide_index=True,
-        )
-
-        export_buttons(
-            pool,
-            f"overview_{league}_{season}".replace(" ", "_"),
-            "home",
-        )
+    section("Full Squad", "users")
+    display_cols = ["player", "Pos", "Age", "Nation", "Matches_Played", "Minutes_Played", "Goals", "Assists"]
+    if metric_has_data(squad, "Expected_Goals"):
+        display_cols += ["Expected_Goals", "Expected_Assists"]
+    squad_table = squad[display_cols].sort_values("Minutes_Played", ascending=False)
+    st.dataframe(styled_dataframe(squad_table), width="stretch", hide_index=True)
+    export_buttons(squad_table, f"{team.replace(' ', '_')}_{season}_squad", "ts")
