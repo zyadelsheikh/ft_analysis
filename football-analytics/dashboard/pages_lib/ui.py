@@ -14,6 +14,7 @@ def inject_styles():
         .app-section-icon { width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:11px; color:#62e6b5; background:linear-gradient(135deg,#193c38,#122323); border:1px solid #2d6258; }
         .app-section-icon svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
         .filter-panel-title { color:#b7d0ca; font-size:11px; font-weight:750; letter-spacing:1px; text-transform:uppercase; margin:12px 0 8px; }
+        [data-testid="stSelectbox"] label, [data-testid="stSlider"] label { color:#c7ddd7 !important; font-size:14px !important; font-weight:650 !important; }
         [data-testid="stSelectbox"] > div > div, [data-testid="stMultiSelect"] > div > div { background:#172323; border-color:#2c4546; border-radius:11px; }
         [data-testid="stSlider"] { padding:4px 2px 8px; }
         .app-card { background:#122323; border:1px solid #274141; border-radius:14px; padding:14px 15px; margin-bottom:10px; }
