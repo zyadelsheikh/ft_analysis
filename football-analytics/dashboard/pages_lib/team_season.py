@@ -49,13 +49,13 @@ def render(full_df: pd.DataFrame):
     c5.metric("Total Minutes", f"{total_min:,}")
 
     if metric_has_data(squad, "Expected_Goals"):
-        section("Team Stats Breakdown")
+        section("Team Stats Breakdown", "chart")
         cols = st.columns(len(ADVANCED_TEAM_METRICS))
         for i, (col, label) in enumerate(ADVANCED_TEAM_METRICS):
             total = squad[col].sum() if col in squad.columns else np.nan
             cols[i].metric(label, f"{total:.0f}" if pd.notna(total) else "—")
 
-    section("Top Scorers")
+    section("Top Scorers", "trophy")
     top = squad.sort_values("Goals", ascending=False).head(10)
     if top["Goals"].sum() > 0:
         fig = px.bar(
@@ -63,13 +63,21 @@ def render(full_df: pd.DataFrame):
             labels={"player": "", "Goals": "Goals"},
             color_discrete_sequence=["#2dd4bf"],
         )
-        fig.update_layout(yaxis=dict(categoryorder="total ascending"), height=350, margin=dict(l=10, r=10, t=10, b=10))
+        fig.update_layout(
+            yaxis=dict(categoryorder="total ascending", gridcolor="#29403e", zeroline=False),
+            xaxis=dict(gridcolor="#29403e", zeroline=False),
+            height=350,
+            margin=dict(l=10, r=10, t=10, b=10),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#b8cfca"),
+        )
         st.plotly_chart(fig, width="stretch")
     else:
         st.info("No goal data available for this squad in this season.")
 
     if compare_teams:
-        section(f"🆚 Team Comparison — {team} vs {', '.join(compare_teams)}")
+        section(f"Team Comparison — {team} vs {', '.join(compare_teams)}", "users")
         st.caption("Compared using the same season as the primary team, regardless of league.")
         all_teams = [team] + compare_teams
         summary = team_metric_totals(full_df, all_teams, season_id, COMPARE_METRICS)
@@ -82,11 +90,21 @@ def render(full_df: pd.DataFrame):
                 melted, x="Metric", y="Total", color="team", barmode="group",
                 color_discrete_sequence=px.colors.qualitative.Set2,
             )
-            fig.update_layout(height=380, margin=dict(l=10, r=10, t=20, b=10), legend_title="")
+            fig.update_layout(
+                height=380,
+                margin=dict(l=10, r=10, t=20, b=10),
+                legend_title="",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#b8cfca"),
+                xaxis=dict(gridcolor="#29403e", zeroline=False),
+                yaxis=dict(gridcolor="#29403e", zeroline=False),
+                legend=dict(bgcolor="rgba(18,35,35,.85)", bordercolor="#274141", borderwidth=1),
+            )
             st.plotly_chart(fig, width="stretch")
             st.dataframe(summary, width="stretch", hide_index=True)
 
-    section(f"📈 {team} — Trend Across Seasons")
+    section(f"{team} — Trend Across Seasons", "chart")
     trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
     trend_df = team_trend(full_df, team, trend_metrics)
     if len(trend_df) >= 2:
@@ -94,12 +112,51 @@ def render(full_df: pd.DataFrame):
             trend_df, x="season", y=trend_metrics, markers=True,
             labels={"value": "Total", "season": "Season", "variable": "Metric"},
         )
-        fig.update_layout(height=350, margin=dict(l=10, r=10, t=20, b=10), legend_title="")
+        trend_colors = {"Goals": "#44d7a7", "Assists": "#60a5fa"}
+        fig.update_traces(
+            mode="lines+markers",
+            line=dict(width=3),
+            marker=dict(size=7, line=dict(width=1, color="#0f1919")),
+        )
+        for trace in fig.data:
+            if trace.name in trend_colors:
+                trace.line.color = trend_colors[trace.name]
+                trace.marker.color = trend_colors[trace.name]
+
+        fig.update_layout(
+            height=390,
+            margin=dict(l=20, r=20, t=18, b=20),
+            legend_title="",
+            hovermode="x unified",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#b8cfca"),
+            xaxis=dict(
+                title="Season",
+                showgrid=False,
+                linecolor="#35504c",
+            ),
+            yaxis=dict(
+                title="Total",
+                gridcolor="#29403e",
+                zeroline=False,
+                linecolor="#35504c",
+            ),
+            legend=dict(
+                orientation="h",
+                y=1.08,
+                x=.5,
+                xanchor="center",
+                bgcolor="rgba(18,35,35,.85)",
+                bordercolor="#274141",
+                borderwidth=1,
+            ),
+        )
         st.plotly_chart(fig, width="stretch")
     else:
         st.info(f"{team} only has one season on record — nothing to trend yet.")
 
-    section("Full Squad")
+    section("Full Squad", "users")
     display_cols = ["player", "Pos", "Age", "Nation", "Matches_Played", "Minutes_Played", "Goals", "Assists"]
     if metric_has_data(squad, "Expected_Goals"):
         display_cols += ["Expected_Goals", "Expected_Assists"]
