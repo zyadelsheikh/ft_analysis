@@ -9,15 +9,21 @@ from pages_lib.ui import inject_styles, hero, section
 def render(df):
     inject_styles()
 
-    season = st.selectbox(
-        "Season",
-        sorted(df["season"].unique())
+    hero(
+        "Player Analytics",
+        "Player Similarity Comparison",
+        "Find players with a similar statistical profile",
     )
+    section("Similarity Filters", "chart")
 
-    league = st.selectbox(
-        "League",
-        ["All Leagues"] + sorted(df["league"].dropna().unique())
-    )
+    filter_left, filter_right = st.columns(2)
+    with filter_left:
+        season = st.selectbox("Season", sorted(df["season"].unique()))
+    with filter_right:
+        league = st.selectbox(
+            "League",
+            ["All Leagues"] + sorted(df["league"].dropna().unique()),
+        )
 
     season_df = df[
         df["season"] == season
@@ -53,10 +59,11 @@ def render(df):
         st.warning("No data available for this season.")
         return
 
-    player = st.selectbox(
-        "Player",
-        sorted(season_df["player"].unique())
-    )
+    player_col, number_col = st.columns([1.4, 1])
+    with player_col:
+        player = st.selectbox("Player", sorted(season_df["player"].unique()))
+
+    section("Selected Player Profile", "users")
 
     scaler = StandardScaler()
 
@@ -71,12 +78,13 @@ def render(df):
         for idx, player in enumerate(season_df["player"])
     }
 
-    top_n = st.slider(
-        "Number of Similar Players",
-        min_value=3,
-        max_value=15,
-        value=5
-    )
+    with number_col:
+        top_n = st.slider(
+            "Number of Similar Players",
+            min_value=3,
+            max_value=15,
+            value=5,
+        )
 
     def get_similar_players(player_name, top_n=5):
 
@@ -105,8 +113,7 @@ def render(df):
         top_n
     )
 
-    hero("Player Analytics", "Player Similarity Comparison", f"{player} · {season}")
-    section(f"Players Similar to {player}")
+    section(f"Players Similar to {player}", "target")
 
     if len(result) >= 3:
 
@@ -114,21 +121,21 @@ def render(df):
 
         with col1:
             st.metric(
-                "🥇 Most Similar",
+                "Best Match",
                 result.iloc[0]["player"],
                 f"{result.iloc[0]['Similarity']}%"
             )
 
         with col2:
             st.metric(
-                "🥈 Second Closest",
+                "Second Match",
                 result.iloc[1]["player"],
                 f"{result.iloc[1]['Similarity']}%"
             )
 
         with col3:
             st.metric(
-                "🥉 Third Closest",
+                "Third Match",
                 result.iloc[2]["player"],
                 f"{result.iloc[2]['Similarity']}%"
             )
@@ -145,14 +152,27 @@ def render(df):
 
     fig.update_layout(
         yaxis=dict(
-            autorange="reversed"
+            autorange="reversed",
+            gridcolor="#29403e",
+            zeroline=False,
         ),
         xaxis_title="Similarity %",
         yaxis_title="",
-        height=450
+        height=330,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#b8cfca", size=13),
+        xaxis=dict(gridcolor="#29403e", zeroline=False, tickfont=dict(size=12)),
+        margin=dict(l=10, r=20, t=10, b=16),
+    )
+
+    fig.update_traces(
+        marker_color="#44d7a7",
+        textfont=dict(color="#effaf7", size=12),
     )
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={"displayModeBar": False},
     )
