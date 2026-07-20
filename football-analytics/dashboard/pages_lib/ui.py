@@ -1,4 +1,61 @@
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
+
+
+CHART_TEXT = "#d8ebe6"
+CHART_MUTED = "#a8c1bb"
+CHART_GRID = "#29403e"
+CHART_PANEL = "rgba(18,35,35,.94)"
+
+
+def style_chart(fig: go.Figure) -> go.Figure:
+    """Apply the shared dark theme and readable hover treatment to every chart."""
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color=CHART_TEXT, size=12),
+        hoverlabel=dict(
+            bgcolor="#173331",
+            bordercolor="#55dcb2",
+            font=dict(color="#f4faf8", size=13, family="Arial"),
+            align="left",
+        ),
+        legend=dict(
+            bgcolor=CHART_PANEL,
+            bordercolor="#35635b",
+            borderwidth=1,
+            font=dict(color=CHART_TEXT, size=12),
+        ),
+    )
+    return fig
+
+
+def styled_dataframe(df: pd.DataFrame):
+    """Return a dataframe styled to remain legible inside the dark dashboard."""
+    return (
+        df.style
+        .set_properties(**{
+            "background-color": "#122323",
+            "color": "#e1f0ec",
+            "border-color": "#294a47",
+        })
+        .set_table_styles([
+            {
+                "selector": "th",
+                "props": [
+                    ("background-color", "#173331"),
+                    ("color", "#f0faf7"),
+                    ("font-weight", "700"),
+                    ("border-color", "#35635b"),
+                ],
+            },
+            {
+                "selector": "tbody tr:hover td",
+                "props": [("background-color", "#1d403c"), ("color", "#ffffff")],
+            },
+        ])
+    )
 
 
 def inject_styles():
@@ -21,6 +78,8 @@ def inject_styles():
         [data-testid="stSlider"] [role="slider"] { background:#44d7a7 !important; border:2px solid #0e2623 !important; box-shadow:0 0 0 2px rgba(68,215,167,.2) !important; }
         [data-testid="stSlider"] [data-baseweb="slider"] > div > div > div { background:#44d7a7 !important; }
         [data-testid="stSlider"] [data-baseweb="slider"] > div > div:first-child { background:#203334 !important; }
+        [data-testid="stSlider"] [data-baseweb="slider"] [role="progressbar"] { background:#44d7a7 !important; }
+        [data-testid="stSlider"] [data-baseweb="slider"] div[style*="background"] { background:#44d7a7 !important; }
         .app-card { background:#122323; border:1px solid #274141; border-radius:14px; padding:14px 15px; margin-bottom:10px; }
         div[data-testid="stMetric"] {
             position:relative;
@@ -63,6 +122,9 @@ def inject_styles():
         }
         div[data-testid="stMetricDelta"] { font-size:11px !important; }
         div[data-testid="stPlotlyChart"] { background:#122323; border:1px solid #274141; border-radius:16px; padding:8px; }
+        div[data-testid="stPlotlyChart"] > div { background:#122323 !important; border-radius:12px; }
+        div[data-testid="stPlotlyChart"] iframe { background:#122323 !important; }
+        [data-testid="stDataFrame"] { background:#122323 !important; border:1px solid #35635b !important; border-radius:15px !important; overflow:hidden !important; }
         </style>
         """,
         unsafe_allow_html=True,
