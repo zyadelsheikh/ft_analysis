@@ -46,16 +46,17 @@ def _with_extra_stats(row: pd.Series) -> dict:
 def _inject_styles():
     st.markdown("""
     <style>
-    .ps-hero { background: linear-gradient(135deg,#172b2b 0%,#102020 55%,#0c1515 100%); border:1px solid #274444; border-radius:20px; padding:26px 28px 22px; margin:4px 0 22px; box-shadow:0 14px 36px rgba(0,0,0,.18); }
+    .ps-hero { background:linear-gradient(135deg,#172b2b 0%,#102020 55%,#0c1515 100%); border:1px solid #274444; border-radius:20px; padding:26px 28px 22px; margin:4px 0 22px; box-shadow:0 14px 36px rgba(0,0,0,.18); }
     .ps-kicker { color:#62e6b5; font-size:12px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; margin-bottom:7px; }
     .ps-name { color:#f8fafc; font-size:34px; font-weight:800; line-height:1.1; margin:0; }
     .ps-subtitle { color:#b3c6c3; font-size:14px; margin-top:8px; }
     .ps-meta { color:#d4e1df; font-size:13px; margin-top:16px; }
-    .ps-kpi { background:rgba(255,255,255,.055); border:1px solid rgba(130,239,203,.18); border-radius:13px; padding:13px 14px; min-height:74px; }
-    .ps-kpi-label { color:#9db6b1; font-size:11px; text-transform:uppercase; letter-spacing:.7px; }
-    .ps-kpi-value { color:#f8fafc; font-size:23px; font-weight:750; margin-top:5px; }
-    .ps-section { color:#e7f5f1; font-size:19px; font-weight:750; margin:12px 0 14px; }
-    .ps-card { background:#122323; border:1px solid #274141; border-radius:14px; padding:14px 15px; margin-bottom:10px; }
+    .ps-kpi { position:relative; overflow:hidden; background:linear-gradient(145deg,rgba(28,52,51,.94),rgba(17,31,31,.98)); border:1px solid rgba(68,215,167,.24); border-radius:15px; padding:15px 16px 14px; min-height:76px; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+    .ps-kpi::before { content:""; position:absolute; left:0; top:0; width:100%; height:3px; background:linear-gradient(90deg,#44d7a7,#60a5fa); opacity:.9; }
+    .ps-kpi-label { color:#a9beb9; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.85px; }
+    .ps-kpi-value { color:#e9faf5; font-size:25px; font-weight:800; line-height:1.15; margin-top:7px; }
+    .ps-section { color:#e7f5f1; font-size:19px; font-weight:750; margin:18px 0 14px; letter-spacing:.05px; }
+    .ps-card { background:linear-gradient(145deg,rgba(28,52,51,.92),rgba(17,31,31,.96)); border:1px solid rgba(68,215,167,.2); border-radius:15px; padding:14px 15px; margin-bottom:10px; box-shadow:0 8px 24px rgba(0,0,0,.1); }
     .ps-stat-label { color:#a7bfba; font-size:12px; }
     .ps-stat-value { color:#f4faf8; font-size:21px; font-weight:750; margin-top:4px; }
     .ps-compare-label { color:#dbeae6; font-size:13px; font-weight:650; }
@@ -63,8 +64,8 @@ def _inject_styles():
     .ps-bar { height:6px; border-radius:99px; background:#29403e; margin-top:6px; overflow:hidden; }
     .ps-fill { height:100%; border-radius:99px; background:#44d7a7; }
     .ps-fill.alt { background:#fb923c; }
-    .ps-table { border:1px solid #274141; border-radius:14px; overflow:hidden; }
-    div[data-testid="stPlotlyChart"] { background:#122323; border:1px solid #274141; border-radius:16px; padding:8px; }
+    .ps-table { border:1px solid #274141; border-radius:15px; overflow:hidden; background:#122323; }
+    div[data-testid="stPlotlyChart"] { background:#122323; border:1px solid #274141; border-radius:16px; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,.1); }
     </style>
     """, unsafe_allow_html=True)
 
@@ -127,7 +128,7 @@ def render(full_df: pd.DataFrame):
         trend_df = trend_df.rename(columns={"Expected_Goals": "xG", "Expected_Assists": "xA"})
         plot_metrics = [c for c in ["Goals", "Assists", "xG", "xA"] if c in trend_df.columns]
         fig = px.line(trend_df, x="season", y=plot_metrics, markers=True, labels={"value": "Total", "season": "Season", "variable": "Metric"})
-        colors = {"Goals": "#60a5fa", "Assists": "#fbbf24", "xG": "#fb7185", "xA": "#44d7a7"}
+        colors = {"Goals": "#44d7a7", "Assists": "#60a5fa", "xG": "#a78bfa", "xA": "#f59e0b"}
         fig.update_traces(mode="lines+markers", line=dict(width=2.2), marker=dict(size=7))
         fig.update_layout(height=420, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(size=12, color="#c7d9d5"), hovermode="x unified", legend=dict(orientation="h", y=1.08, x=.5, xanchor="center"), margin=dict(l=20, r=20, t=32, b=20), xaxis_title="Season", yaxis_title="Performance")
         for trace in fig.data:
