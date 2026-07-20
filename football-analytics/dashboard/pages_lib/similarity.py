@@ -3,11 +3,11 @@ import plotly.express as px
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import cosine_similarity
+from pages_lib.ui import inject_styles, hero, section
 
 
 def render(df):
-
-    st.markdown("### 📊 Player Similarity Comparison")
+    inject_styles()
 
     season = st.selectbox(
         "Season",
@@ -105,11 +105,8 @@ def render(df):
         top_n
     )
 
-    st.markdown("---")
-
-    st.subheader(
-        f"Players Similar to {player}"
-    )
+    hero("Player Analytics", "Player Similarity Comparison", f"{player} · {season}")
+    section(f"Players Similar to {player}")
 
     if len(result) >= 3:
 
@@ -137,8 +134,6 @@ def render(df):
             )
 
     
-
-    st.markdown("---")
 
     fig = px.bar(
         result,
