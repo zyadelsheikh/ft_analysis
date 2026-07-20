@@ -28,53 +28,20 @@ def hero(kicker: str, title: str, subtitle: str):
     )
 
 
-def section(title, icon=""):
+def section(title, icon="chart"):
     icons = {
-        "scorers": """
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                 stroke="#fbbf24" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round">
-                <path d="M8 21h8"/>
-                <path d="M12 17v4"/>
-                <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/>
-                <path d="M7 7H4a3 3 0 0 0 3 3"/>
-                <path d="M17 7h3a3 3 0 0 1-3 3"/>
-            </svg>
-        """,
-        "assisters": """
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                 stroke="#38bdf8" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/>
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 3v6"/>
-                <path d="M21 12h-6"/>
-                <path d="M12 21v-6"/>
-                <path d="M3 12h6"/>
-            </svg>
-        """,
+        "trophy": "🏆",
+        "target": "🎯",
+        "chart": "📈",
     }
+
+    icon_value = icons.get(icon, "📊")
 
     st.markdown(
         f"""
-        <div class="app-section" style="
-            display:flex;
-            align-items:center;
-            gap:10px;
-        ">
-            <span style="
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                width:34px;
-                height:34px;
-                border-radius:10px;
-                background:rgba(255,255,255,.07);
-                border:1px solid rgba(255,255,255,.12);
-            ">
-                {icons.get(icon, "")}
-            </span>
-            <span>{title}</span>
+        <div class="app-section">
+            <div class="app-section-icon">{icon_value}</div>
+            <div>{title}</div>
         </div>
         """,
         unsafe_allow_html=True,
