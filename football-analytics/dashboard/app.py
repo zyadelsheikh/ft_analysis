@@ -235,7 +235,7 @@ with st.sidebar:
     label_visibility="collapsed",
   )
 
-    if query:
+   if query:
 
         matching_players, matching_teams = search_entities(df, query)
 
