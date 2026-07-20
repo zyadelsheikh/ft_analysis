@@ -17,6 +17,10 @@ def inject_styles():
         [data-testid="stSelectbox"] label, [data-testid="stSlider"] label { color:#c7ddd7 !important; font-size:14px !important; font-weight:650 !important; }
         [data-testid="stSelectbox"] > div > div, [data-testid="stMultiSelect"] > div > div { background:#172323; border-color:#2c4546; border-radius:11px; }
         [data-testid="stSlider"] { padding:4px 2px 8px; }
+        [data-testid="stSelectbox"] svg, [data-testid="stMultiSelect"] svg { color:#62e6b5 !important; fill:#62e6b5 !important; }
+        [data-testid="stSlider"] [role="slider"] { background:#44d7a7 !important; border:2px solid #0e2623 !important; box-shadow:0 0 0 2px rgba(68,215,167,.2) !important; }
+        [data-testid="stSlider"] [data-baseweb="slider"] > div > div > div { background:#44d7a7 !important; }
+        [data-testid="stSlider"] [data-baseweb="slider"] > div > div:first-child { background:#203334 !important; }
         .app-card { background:#122323; border:1px solid #274141; border-radius:14px; padding:14px 15px; margin-bottom:10px; }
         div[data-testid="stMetric"] {
             position:relative;
