@@ -233,12 +233,22 @@ with st.sidebar:
     <div class="sidebar-block-title">Global Search</div>
     """, unsafe_allow_html=True)
 
-    query = st.text_input(
-        "Search Players & Clubs",
-        key="global_search",
-        placeholder="e.g. Messi, Arsenal..."
+    st.markdown(
+    """
+    <div class="sidebar-block-title">
+        Find a player or club
+    </div>
+    """,
+    unsafe_allow_html=True,
     )
 
+    query = st.text_input(
+        "Find a player or club",
+        key="global_search",
+        placeholder="Type a player or club name...",
+        label_visibility="collapsed",
+    )
+    
     if query:
 
         matching_players, matching_teams = search_entities(df, query)
