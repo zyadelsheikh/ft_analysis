@@ -3,14 +3,15 @@ import plotly.express as px
 import streamlit as st
 
 from pages_lib.filters import season_league_filters, export_buttons
+from pages_lib.ui import inject_styles, hero, section
 
 
 def render(df: pd.DataFrame):
+    inject_styles()
     with st.sidebar:
         pool, league, season, _ = season_league_filters(df, "home")
 
-    st.markdown("### 📊 Performance Overview")
-    st.caption(f"{league} · {season}")
+    hero("Dashboard Overview", "Performance Overview", f"{league} · {season}")
 
     c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Players", pool["player"].nunique())
@@ -20,12 +21,10 @@ def render(df: pd.DataFrame):
     avg_age = pool["Age"].mean()
     c5.metric("Avg. Age", f"{avg_age:.1f}" if pd.notna(avg_age) else "—")
 
-    st.divider()
-
     left, right = st.columns(2)
 
     with left:
-        st.markdown("#### 🥇 Top Scorers")
+        section("🥇 Top Scorers")
         top_scorers = (
             pool[["player", "team", "Goals"]]
             .sort_values("Goals", ascending=False)
@@ -44,7 +43,7 @@ def render(df: pd.DataFrame):
             st.info("No goal data for this competition / season.")
 
     with right:
-        st.markdown("#### 🎯 Top Assisters")
+        section("🎯 Top Assisters")
         top_assists = (
             pool[["player", "team", "Assists"]]
             .sort_values("Assists", ascending=False)
@@ -62,9 +61,7 @@ def render(df: pd.DataFrame):
         else:
             st.info("No assist data for this competition / season.")
 
-    st.divider()
-
-    st.markdown("#### ⚽ Goals by Team")
+    section("⚽ Goals by Team")
     team_goals = pool.groupby("team", as_index=False)["Goals"].sum().sort_values("Goals", ascending=False)
     if team_goals["Goals"].sum() > 0:
         fig = px.bar(
