@@ -159,6 +159,31 @@ st.markdown("""
     background: #1e293b !important;
 }
 
+/* Unified dataframe styling */
+[data-testid="stDataFrame"] {
+    border: 1px solid #274141 !important;
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    background: #122323 !important;
+}
+
+[data-testid="stDataFrame"] [role="columnheader"] {
+    background: #173331 !important;
+    color: #d7ebe5 !important;
+    border-color: #294a47 !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stDataFrame"] [role="gridcell"] {
+    background: #122323 !important;
+    color: #c7ddd7 !important;
+    border-color: #203c3a !important;
+}
+
+[data-testid="stDataFrame"] [role="row"]:hover [role="gridcell"] {
+    background: #1a3533 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
