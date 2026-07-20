@@ -30,6 +30,18 @@ CUSTOM_CSS = """
     padding-bottom: 2rem;
 }
 
+[data-testid="stSidebar"] > div:first-child { padding-top: 1.2rem; }
+.sidebar-brand { display:flex; align-items:center; gap:12px; padding:10px 4px 18px; border-bottom:1px solid #26363a; margin-bottom:16px; }
+.sidebar-brand-mark { width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:13px; color:#65e6b7; background:linear-gradient(145deg,#173e38,#102522); border:1px solid #2e8c76; box-shadow:0 0 22px rgba(68,215,167,.13); }
+.sidebar-brand-mark svg { width:25px; height:25px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.sidebar-brand-title { color:#f4faf8; font-size:17px; font-weight:800; line-height:1.1; }
+.sidebar-brand-subtitle { color:#8da8a2; font-size:11px; margin-top:4px; letter-spacing:.3px; }
+.sidebar-block-title { color:#b7d0ca; font-size:11px; font-weight:750; letter-spacing:1px; text-transform:uppercase; margin:8px 0; }
+[data-testid="stSidebar"] .stTextInput input { height:42px; background:#172022 !important; border:1px solid #2c4546 !important; border-radius:12px !important; color:#eefaf6 !important; }
+[data-testid="stSidebar"] .stTextInput input:focus { border-color:#44d7a7 !important; box-shadow:0 0 0 1px #44d7a7 !important; }
+[data-testid="stSidebar"] .stButton button { border:1px solid #294343; background:#172323; color:#d8ebe6; border-radius:10px; text-align:left; }
+[data-testid="stSidebar"] .stButton button:hover { border-color:#44d7a7; color:#fff; }
+
 [data-testid="stMetric"] {
     background-color: rgba(45, 212, 191, 0.06);
     border: 1px solid rgba(45, 212, 191, 0.18);
@@ -151,13 +163,17 @@ if "nav_page" not in st.session_state:
 with st.sidebar:
 
     st.markdown("""
-    <h1 style='margin-bottom:0;color:white'>
-        ⚽ Football Analytics
-    </h1>
-
-    <p style='color:#9ca3af;margin-top:0'>
-        Football Intelligence Platform
-    </p>
+    <div class="sidebar-brand">
+        <div class="sidebar-brand-mark">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="m12 7 2.2 1.6-.8 2.6h-2.8l-.8-2.6L12 7Z"/>
+                <path d="m5.1 9.2 3.3.7M15.6 9.9l3.3-.7M10.6 11.2 8.8 15M13.4 11.2l1.8 3.8M8.8 15l3.2 2.1 3.2-2.1"/>
+            </svg>
+        </div>
+        <div><div class="sidebar-brand-title">Football Analytics</div><div class="sidebar-brand-subtitle">Football Intelligence Platform</div></div>
+    </div>
+    <div class="sidebar-block-title">Global Search</div>
     """, unsafe_allow_html=True)
 
     query = st.text_input(
@@ -190,6 +206,8 @@ with st.sidebar:
             )
 
         st.divider()
+
+    st.markdown('<div class="sidebar-block-title">Workspace</div>', unsafe_allow_html=True)
 
     selected = option_menu(
         menu_title=None,
@@ -233,11 +251,9 @@ with st.sidebar:
     st.session_state["nav_page"] = selected
 
     st.markdown("""
-    <hr>
-
-    <div style='color:#9ca3af;font-size:13px'>
-        🌍 Top 5 European Leagues<br>
-        2017–2026
+    <div style="border-top:1px solid #26363a;margin:18px 0 14px;padding-top:14px;color:#8da8a2;font-size:12px;line-height:1.7">
+        <span style="color:#62e6b5">TOP 5 LEAGUES</span><br>
+        European football data · 2017–2026
     </div>
     """, unsafe_allow_html=True)
 
