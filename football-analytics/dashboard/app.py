@@ -230,7 +230,6 @@ with st.sidebar:
         </div>
         <div><div class="sidebar-brand-title">Football Analytics</div><div class="sidebar-brand-subtitle">Football Intelligence Platform</div></div>
     </div>
-    <div class="sidebar-block-title">Global Search</div>
     """, unsafe_allow_html=True)
 
     st.markdown(
