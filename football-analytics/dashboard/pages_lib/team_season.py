@@ -7,6 +7,7 @@ from data import metric_has_data, team_trend, team_metric_totals
 from pages_lib.filters import (
     season_league_filters, export_buttons, any_league_team_multiselect,
 )
+from pages_lib.ui import inject_styles, hero, section
 
 COMPARE_METRICS = ["Goals", "Assists", "Minutes_Played"]
 ADVANCED_TEAM_METRICS = [
@@ -17,6 +18,7 @@ TREND_METRICS = ["Goals", "Assists"]
 
 
 def render(full_df: pd.DataFrame):
+    inject_styles()
     with st.sidebar:
         pool, league, season, season_id = season_league_filters(full_df, "ts")
         st.markdown("### Team Selection")
@@ -35,8 +37,7 @@ def render(full_df: pd.DataFrame):
         st.warning("No team data available for this competition / season.")
         return
 
-    st.markdown(f"## {team}")
-    st.caption(f"{league} · {season}")
+    hero("Team Profile", team, f"{league} · {season}")
 
     c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Squad Size", squad["player"].nunique())
@@ -48,15 +49,13 @@ def render(full_df: pd.DataFrame):
     c5.metric("Total Minutes", f"{total_min:,}")
 
     if metric_has_data(squad, "Expected_Goals"):
-        st.markdown("#### Team Stats Breakdown")
+        section("Team Stats Breakdown")
         cols = st.columns(len(ADVANCED_TEAM_METRICS))
         for i, (col, label) in enumerate(ADVANCED_TEAM_METRICS):
             total = squad[col].sum() if col in squad.columns else np.nan
             cols[i].metric(label, f"{total:.0f}" if pd.notna(total) else "—")
 
-    st.divider()
-
-    st.markdown("#### Top Scorers")
+    section("Top Scorers")
     top = squad.sort_values("Goals", ascending=False).head(10)
     if top["Goals"].sum() > 0:
         fig = px.bar(
@@ -70,8 +69,7 @@ def render(full_df: pd.DataFrame):
         st.info("No goal data available for this squad in this season.")
 
     if compare_teams:
-        st.divider()
-        st.markdown(f"#### 🆚 Team Comparison — {team} vs {', '.join(compare_teams)}")
+        section(f"🆚 Team Comparison — {team} vs {', '.join(compare_teams)}")
         st.caption("Compared using the same season as the primary team, regardless of league.")
         all_teams = [team] + compare_teams
         summary = team_metric_totals(full_df, all_teams, season_id, COMPARE_METRICS)
@@ -88,8 +86,7 @@ def render(full_df: pd.DataFrame):
             st.plotly_chart(fig, width="stretch")
             st.dataframe(summary, width="stretch", hide_index=True)
 
-    st.divider()
-    st.markdown(f"#### 📈 {team} — Trend Across Seasons")
+    section(f"📈 {team} — Trend Across Seasons")
     trend_metrics = [m for m in TREND_METRICS if metric_has_data(full_df, m)]
     trend_df = team_trend(full_df, team, trend_metrics)
     if len(trend_df) >= 2:
@@ -102,8 +99,7 @@ def render(full_df: pd.DataFrame):
     else:
         st.info(f"{team} only has one season on record — nothing to trend yet.")
 
-    st.divider()
-    st.markdown("#### Full Squad")
+    section("Full Squad")
     display_cols = ["player", "Pos", "Age", "Nation", "Matches_Played", "Minutes_Played", "Goals", "Assists"]
     if metric_has_data(squad, "Expected_Goals"):
         display_cols += ["Expected_Goals", "Expected_Assists"]
